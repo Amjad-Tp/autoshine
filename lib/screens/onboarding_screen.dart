@@ -20,6 +20,7 @@ class OnboardingScreen extends StatelessWidget {
         'Login',
         style: TextStyle(color: blackColor, fontSize: 17),
       ),
+      trailingFunction: () => Navigator.pushReplacementNamed(context, '/login'),
       controllerColor: blackColor,
 
       background: [
@@ -66,21 +67,24 @@ class OnboardingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 50),
 
-              Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Let's Start",
-                    style: TextStyle(
-                      color: whiteColor,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w600,
+              InkWell(
+                onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+                child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Let's Start",
+                      style: TextStyle(
+                        color: whiteColor,
+                        fontSize: 23,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
