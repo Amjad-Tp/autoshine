@@ -3,15 +3,17 @@ import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loginFormKey = GlobalKey<FormState>();
+    final signupFormKey = GlobalKey<FormState>();
 
     final emailController = TextEditingController();
+    final nameController = TextEditingController();
     final passwordController = TextEditingController();
+    final confirmPsController = TextEditingController();
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -20,7 +22,7 @@ class LoginScreen extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: 330,
                   height: 220,
@@ -30,19 +32,20 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 Text(
-                  'Login',
+                  'Sign up',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 33),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
 
                 Form(
-                  key: loginFormKey,
+                  key: signupFormKey,
                   child: Column(
                     children: [
+                      //--email
                       GradientTextfield(
                         controller: emailController,
-                        hintText: 'Email Address',
+                        hintText: 'Email',
                         icon: Icons.email_rounded,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -56,6 +59,19 @@ class LoginScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 10),
+                      //--name
+                      GradientTextfield(
+                        controller: nameController,
+                        hintText: 'Name',
+                        icon: Icons.person_rounded,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Name is Required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
                       GradientTextfield(
                         controller: passwordController,
                         hintText: 'Password',
@@ -63,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                         obsecureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Password is Required';
                           }
                           if (value.length < 6) {
                             return 'Password must be at least 6 characters';
@@ -71,43 +87,45 @@ class LoginScreen extends StatelessWidget {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 10),
+                      GradientTextfield(
+                        controller: confirmPsController,
+                        hintText: 'Password',
+                        icon: Icons.lock_rounded,
+                        obsecureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Confirmation Password is Required';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          if (passwordController.text != value) {
+                            return "Password doesn't match";
+                          }
+                          return null;
+                        },
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 3),
-                //------Navigate to recover password screen
-                InkWell(
-                  borderRadius: BorderRadius.circular(10),
-                  onTap:
-                      () => Navigator.pushNamed(context, '/recover-password'),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      'Forgot Password ?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
                 //Navigate to Home screen
                 LoginSignupButton(
-                  title: 'Login',
+                  title: 'Sign Up',
                   navigation: () {
-                    if (loginFormKey.currentState!.validate()) {
+                    if (signupFormKey.currentState!.validate()) {
                       Navigator.pushReplacementNamed(context, '/home');
                     }
                   },
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
                 Text(
-                  '_______ or login with _______',
+                  '_______ or Sign up with _______',
                   style: TextStyle(fontSize: 13),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 Container(
                   width: 215,
                   height: 45,
@@ -118,6 +136,7 @@ class LoginScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      //---Google
                       InkWell(
                         onTap: () {},
                         child: Image.asset(
@@ -125,6 +144,7 @@ class LoginScreen extends StatelessWidget {
                           width: 29,
                         ),
                       ),
+                      //---Face book
                       InkWell(
                         onTap: () {},
                         child: Image.asset(
@@ -132,6 +152,7 @@ class LoginScreen extends StatelessWidget {
                           width: 35,
                         ),
                       ),
+                      //---Twitter X
                       InkWell(
                         onTap: () {},
                         child: Image.asset(
@@ -142,14 +163,14 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 15),
                 RichText(
                   text: TextSpan(
-                    text: "Don't have an account? ",
+                    text: "Already have an account? ",
                     style: TextStyle(color: blackColor),
                     children: [
                       TextSpan(
-                        text: 'Sign up',
+                        text: 'Login',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
@@ -159,7 +180,7 @@ class LoginScreen extends StatelessWidget {
                               ..onTap =
                                   () => Navigator.pushReplacementNamed(
                                     context,
-                                    '/signup',
+                                    '/login',
                                   ),
                       ),
                     ],
