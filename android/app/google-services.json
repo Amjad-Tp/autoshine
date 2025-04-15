@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "380810622513",
+    "project_id": "autoshine-bda4d",
+    "storage_bucket": "autoshine-bda4d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380810622513:android:09d5cade20b101880f4710",
+        "android_client_info": {
+          "package_name": "com.example.autoshine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS66qIIGIU7jO8EC7wTE_hlBNiGuiS2Fg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
