@@ -1,7 +1,7 @@
 import 'package:autoshine/services/auth_service.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -49,6 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
+    //Resend Verification
     on<AuthResendVerificationEmail>((event, emit) async {
       try {
         final user = FirebaseAuth.instance.currentUser;
@@ -60,6 +61,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } catch (e) {
         emit(AuthFailed(error: 'Could not send verification email.'));
+      }
+    });
+
+    //Logout
+    on<AuthLogoutRequested>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        await authService.logOut();
+        emit(AuthInitial());
+      } catch (e) {
+        emit(AuthFailed(error: 'Logout failed. Please try again.'));
       }
     });
   }

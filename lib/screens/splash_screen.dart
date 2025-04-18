@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
       final user = FirebaseAuth.instance.currentUser;
 
       if (user != null && user.emailVerified) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/navbar');
       } else {
         Navigator.pushReplacementNamed(context, '/onboarding');
       }
