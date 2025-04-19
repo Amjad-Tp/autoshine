@@ -1,73 +1,21 @@
-import 'dart:async';
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
+import 'package:autoshine/get/sign_up_controller.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  SignupScreen({super.key});
 
-  @override
-  State<SignupScreen> createState() => _SignupScreenState();
-}
-
-class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
-  bool _showResendButton = false;
-  Timer? _resendTimer;
-  Timer? _emailVerificationTimer;
-
-  void _startResendTimer() {
-    setState(() {
-      _showResendButton = false;
-    });
-
-    _resendTimer?.cancel();
-    _resendTimer = Timer(const Duration(seconds: 20), () {
-      if (mounted) {
-        setState(() {
-          _showResendButton = true;
-        });
-      }
-    });
-  }
-
-  void _startEmailVerificationCheck() {
-    _emailVerificationTimer?.cancel();
-    _emailVerificationTimer = Timer.periodic(const Duration(seconds: 3), (
-      timer,
-    ) async {
-      final user = context.read<AuthBloc>().authService.getCurrentUser();
-      await user?.reload();
-      final refreshedUser =
-          context.read<AuthBloc>().authService.getCurrentUser();
-
-      if (refreshedUser?.emailVerified ?? false) {
-        timer.cancel();
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, '/vehicletype');
-        }
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _resendTimer?.cancel();
-    _emailVerificationTimer?.cancel();
-    _emailController.dispose();
-    _nameController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
+  final controller = Get.put(SignupController(authBloc: Get.find<AuthBloc>()));
 
   @override
   Widget build(BuildContext context) {
@@ -75,24 +23,18 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: whiteColor,
       body: SafeArea(
         child: BlocListener<AuthBloc, AuthState>(
+          bloc: controller.authBloc,
           listener: (context, state) {
             if (state is AuthSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "Verification email sent. Please check your email.",
-                  ),
-                ),
+              Get.snackbar(
+                'Success',
+                'Verification email sent. Please check your email.',
               );
-              _startEmailVerificationCheck();
+              controller.startEmailVerificationCheck();
             } else if (state is AuthFailed) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.error)));
+              Get.snackbar('Error', state.error);
             } else if (state is AuthVerificationEmailSent) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
+              Get.snackbar('Message', state.message);
             }
           },
           child: SingleChildScrollView(
@@ -171,6 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 25),
                   BlocBuilder<AuthBloc, AuthState>(
+                    bloc: controller.authBloc,
                     builder: (context, state) {
                       return Column(
                         children: [
@@ -185,35 +128,37 @@ class _SignupScreenState extends State<SignupScreen> {
                                 final password =
                                     _passwordController.text.trim();
                                 final name = _nameController.text.trim();
-                                context.read<AuthBloc>().add(
+                                controller.authBloc.add(
                                   AuthSignUpRequested(
                                     email: email,
                                     password: password,
                                     name: name,
                                   ),
                                 );
-                                _startResendTimer();
+                                controller.startResendTimer();
                               }
                             },
                           ),
-                          TextButton(
-                            onPressed:
-                                _showResendButton
-                                    ? () {
-                                      context.read<AuthBloc>().add(
-                                        AuthResendVerificationEmail(),
-                                      );
-                                    }
-                                    : null,
-                            child: Text(
-                              'Resend Verification Email',
-                              style: TextStyle(
-                                color:
-                                    _showResendButton
-                                        ? Colors.blue
-                                        : Colors.grey,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                          Obx(
+                            () => TextButton(
+                              onPressed:
+                                  controller.showResendButton.value
+                                      ? () {
+                                        controller.authBloc.add(
+                                          AuthResendVerificationEmail(),
+                                        );
+                                      }
+                                      : null,
+                              child: Text(
+                                'Resend Verification Email',
+                                style: TextStyle(
+                                  color:
+                                      controller.showResendButton.value
+                                          ? Colors.blue
+                                          : Colors.grey,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
                           ),
@@ -302,9 +247,7 @@ class _SignupScreenState extends State<SignupScreen> {
             text: 'Login',
             style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
             recognizer:
-                TapGestureRecognizer()
-                  ..onTap =
-                      () => Navigator.pushReplacementNamed(context, '/login'),
+                TapGestureRecognizer()..onTap = () => Get.offAllNamed('/login'),
           ),
         ],
       ),

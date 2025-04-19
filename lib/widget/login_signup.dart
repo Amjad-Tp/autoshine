@@ -98,7 +98,7 @@ class LoginSignupButton extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
       ),
     );
   }

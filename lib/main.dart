@@ -11,6 +11,7 @@ import 'package:autoshine/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,23 +27,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthBloc(authService: AuthService())),
+        BlocProvider(create: (_) => AuthBloc(authService: AuthService())),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'AutoShine',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'poppins'),
         initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashScreen(),
-          '/onboarding': (context) => OnboardingScreen(),
-          '/login': (context) => LoginScreen(),
-          '/signup': (context) => SignupScreen(),
-          '/vehicletype': (context) => VehicleTypeScreen(),
-          '/recover-password': (context) => RecoverPasswordScreen(),
-          '/home': (context) => HomeScreen(),
-          '/navbar': (context) => CustomBottomNavigationBar(),
-        },
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(name: '/onboarding', page: () => OnboardingScreen()),
+          GetPage(name: '/login', page: () => LoginScreen()),
+          GetPage(name: '/signup', page: () => SignupScreen()),
+          GetPage(name: '/vehicletype', page: () => VehicleTypeScreen()),
+          GetPage(
+            name: '/recover-password',
+            page: () => RecoverPasswordScreen(),
+          ),
+          GetPage(name: '/home', page: () => HomeScreen()),
+          GetPage(name: '/navbar', page: () => CustomBottomNavigationBar()),
+        ],
       ),
     );
   }
