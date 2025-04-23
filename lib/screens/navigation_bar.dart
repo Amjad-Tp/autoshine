@@ -1,6 +1,6 @@
 import 'package:autoshine/screens/Order_screen.dart';
 import 'package:autoshine/screens/cart_screen.dart';
-import 'package:autoshine/screens/home_screen.dart';
+import 'package:autoshine/screens/home/home_screen.dart';
 import 'package:autoshine/screens/profile_screen.dart';
 import 'package:autoshine/screens/support_screen.dart';
 import 'package:autoshine/values/colors.dart';

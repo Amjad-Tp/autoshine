@@ -1,7 +1,7 @@
 import 'package:autoshine/values/colors.dart';
 import 'package:flutter/material.dart';
 
-class GradientTextfield extends StatelessWidget {
+class GradientTextfield extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData icon;
@@ -18,9 +18,22 @@ class GradientTextfield extends StatelessWidget {
   });
 
   @override
+  State<GradientTextfield> createState() => _GradientTextfieldState();
+}
+
+class _GradientTextfieldState extends State<GradientTextfield> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obsecureText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FormField<String>(
-      validator: validator,
+      validator: widget.validator,
       builder: (field) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +41,7 @@ class GradientTextfield extends StatelessWidget {
             Container(
               width: 350,
               height: 48,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [rockBlue, darkTurquoise],
@@ -37,34 +50,47 @@ class GradientTextfield extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: TextField(
-                controller: controller,
-                obscureText: obsecureText,
-                cursorColor: whiteColor,
-                onChanged: (value) => field.didChange(value),
-                style: TextStyle(color: whiteColor),
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: TextStyle(color: whiteColor),
-                  prefixIcon: Icon(icon, color: whiteColor, size: 30),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
+              child: Row(
+                children: [
+                  Icon(widget.icon, color: whiteColor, size: 30),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: widget.controller,
+                      obscureText: _obscureText,
+                      cursorColor: whiteColor,
+                      onChanged: (value) => field.didChange(value),
+                      style: TextStyle(color: whiteColor),
+                      decoration: InputDecoration(
+                        hintText: widget.hintText,
+                        hintStyle: TextStyle(color: whiteColor),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 12,
-                  ),
-                ),
+                  if (widget.obsecureText)
+                    IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: whiteColor,
+                        size: 22,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
+                ],
               ),
             ),
             if (field.hasError)
               Padding(
-                padding: const EdgeInsets.only(left: 12),
+                padding: const EdgeInsets.only(left: 12, top: 4),
                 child: Text(
                   field.errorText ?? '',
-                  style: TextStyle(
-                    color: const Color(0xFFC71408),
+                  style: const TextStyle(
+                    color: Color(0xFFC71408),
                     fontSize: 10,
                   ),
                 ),
@@ -76,6 +102,7 @@ class GradientTextfield extends StatelessWidget {
   }
 }
 
+//--------Login & SignUp Buttons---------
 class LoginSignupButton extends StatelessWidget {
   final String title;
   final VoidCallback navigation;

@@ -1,16 +1,17 @@
+import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/services/vehicle_services.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:autoshine/widget/vehicle_category_selector.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:icofont_flutter/icofont_flutter.dart';
 
-class CarAddScreen extends StatefulWidget {
-  const CarAddScreen({super.key});
+class CarAddScreen extends StatelessWidget {
+  final VehicleAddController controller = Get.put(VehicleAddController());
 
-  @override
-  State<CarAddScreen> createState() => _CarAddScreenState();
-}
-
-class _CarAddScreenState extends State<CarAddScreen> {
-  int selectedIndex = -1;
+  CarAddScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,170 +25,138 @@ class _CarAddScreenState extends State<CarAddScreen> {
         backgroundColor: scaffoldColor,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30, top: 15),
-          child: Column(
-            children: [
-              Card(
-                elevation: 15,
-                color: whiteColor,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(22, 22, 22, 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildSelectableTile(
-                        0,
-                        'Hatchback type',
-                        FontAwesomeIcons.carRear,
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        child: Column(
+          children: [
+            Card(
+              elevation: 10,
+              color: whiteColor,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(22, 22, 22, 12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Obx(
+                      () => vehicleTypeSelector(
+                        type: 'Hatchback',
+                        selectedType: controller.selectedVehicleType.value,
+                        onSelect: controller.selectType,
+                        title: 'Hatchback type',
+                        icon: IcoFontIcons.carAlt3,
                       ),
-                      buildSelectableTile(
-                        1,
-                        'Sedan type',
-                        FontAwesomeIcons.taxi,
-                      ),
-                      buildSelectableTile(
-                        2,
-                        'SUV or MUV type',
-                        FontAwesomeIcons.carSide,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 45),
-              Container(
-                width: 170,
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/logo/AutoShine_black_tr.png'),
-                    opacity: .3,
-                  ),
-                  color: Colors.grey[400],
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              textFeild('Brand Name'),
-              const SizedBox(height: 15),
-              textFeild('Model Name'),
-
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  button(
-                    () {
-                      Navigator.pop(context);
-                    },
-                    'Back',
-                    rockBlue,
-                    Colors.transparent,
-                    rockBlue,
-                  ),
-                  const SizedBox(width: 12),
-                  button(
-                    () => Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home',
-                      (route) => false,
                     ),
-                    'Done',
-                    rockBlue,
-                    rockBlue,
-                    whiteColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextButton button(
-    VoidCallback onPressed,
-    String name,
-    Color borderColor,
-    Color backgroundColor,
-    Color textColor,
-  ) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        backgroundColor: backgroundColor,
-        foregroundColor: textColor,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: borderColor, width: 2),
-          borderRadius: BorderRadius.circular(13),
-        ),
-      ),
-      child: Text(
-        name,
-        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  TextFormField textFeild(String title) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: title,
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: rockBlue, width: 2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: rockBlue, width: 2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
-  }
-
-  Widget buildSelectableTile(int index, String title, IconData icon) {
-    final isSelected = selectedIndex == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedIndex = index;
-        });
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        height: 50,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.black : Colors.white,
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Row(
-            children: [
-              const SizedBox(width: 15),
-              Icon(
-                icon,
-                color: isSelected ? Colors.white : Colors.black,
-                size: 20,
-              ),
-              const SizedBox(width: 20),
-              Text(
-                title,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                    Obx(
+                      () => vehicleTypeSelector(
+                        type: 'Sedan',
+                        selectedType: controller.selectedVehicleType.value,
+                        onSelect: controller.selectType,
+                        title: 'Sedan type',
+                        icon: IcoFontIcons.carAlt2,
+                      ),
+                    ),
+                    Obx(
+                      () => vehicleTypeSelector(
+                        type: 'SUV/MUV',
+                        selectedType: controller.selectedVehicleType.value,
+                        onSelect: controller.selectType,
+                        title: 'SUV or MUV type',
+                        icon: IcoFontIcons.carAlt1,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 45),
+            Container(
+              width: 170,
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: const DecorationImage(
+                  image: AssetImage('assets/logo/AutoShine_black_tr.png'),
+                  opacity: .3,
+                ),
+                color: Colors.grey[400],
+              ),
+            ),
+            const SizedBox(height: 30),
+            TextFormField(
+              controller: controller.brandController,
+              decoration: inputDecoration('Brand Name'),
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: controller.modelController,
+              decoration: inputDecoration('Model Name'),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                button(
+                  () => Get.back(),
+                  'Back',
+                  rockBlue,
+                  Colors.transparent,
+                  rockBlue,
+                ),
+                const SizedBox(width: 12),
+                button(
+                  () async {
+                    final brand = controller.brandController.text.trim();
+                    final model = controller.modelController.text.trim();
+                    final selectedType = controller.selectedVehicleType.value;
+                    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+                    if (userId == null ||
+                        brand.isEmpty ||
+                        model.isEmpty ||
+                        selectedType.isEmpty) {
+                      Get.snackbar("Error", "Please fill all fields");
+                      return;
+                    }
+
+                    final vehicle = VehicleTypeModel(
+                      vehicleType: selectedType,
+                      category: 'FourWheeler',
+                      brandName: brand,
+                      modelName: model,
+                      vehicleImagePath: 'some_path_or_url',
+                    );
+
+                    await VehicleService.addVehicle(
+                      userId: userId,
+                      vehicle: vehicle,
+                      isTwoWheeler: false,
+                    );
+
+                    Get.snackbar("Success", "Vehicle added");
+                    Get.offAllNamed('/home');
+                  },
+                  'Done',
+                  rockBlue,
+                  rockBlue,
+                  whiteColor,
+                ),
+              ],
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  InputDecoration inputDecoration(String title) {
+    return InputDecoration(
+      hintText: title,
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: rockBlue, width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: rockBlue, width: 2),
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

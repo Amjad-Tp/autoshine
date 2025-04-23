@@ -1,5 +1,5 @@
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
-import 'package:autoshine/screens/home_screen.dart';
+import 'package:autoshine/screens/home/home_screen.dart';
 import 'package:autoshine/screens/login_screen.dart';
 import 'package:autoshine/screens/navigation_bar.dart';
 import 'package:autoshine/screens/onboarding_screen.dart';
@@ -8,6 +8,7 @@ import 'package:autoshine/screens/signup_screen.dart';
 import 'package:autoshine/screens/splash_screen.dart';
 import 'package:autoshine/screens/vehicle_type_screen.dart';
 import 'package:autoshine/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,13 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
+
+  Get.put(AuthBloc(authService: AuthService()));
+
   runApp(MyApp());
 }
 
@@ -26,9 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => AuthBloc(authService: AuthService())),
-      ],
+      providers: [BlocProvider(create: (_) => Get.find<AuthBloc>())],
       child: GetMaterialApp(
         title: 'AutoShine',
         debugShowCheckedModeBanner: false,

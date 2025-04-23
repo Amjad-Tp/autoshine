@@ -1,5 +1,5 @@
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
-import 'package:autoshine/get/sign_up_controller.dart';
+import 'package:autoshine/controller/sign_up_controller.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
@@ -15,7 +15,9 @@ class SignupScreen extends StatelessWidget {
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final controller = Get.put(SignupController(authBloc: Get.find<AuthBloc>()));
+  final SignupController controller = Get.put(
+    SignupController(authBloc: Get.find<AuthBloc>()),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -77,37 +79,46 @@ class SignupScreen extends StatelessWidget {
                           (value) {
                             if (value == null || value.isEmpty)
                               return 'Name is required';
+                            if (value.contains(' '))
+                              return 'Name cannot contain spaces';
                             return null;
                           },
                         ),
                         const SizedBox(height: 10),
-                        _buildTextField(
-                          _passwordController,
-                          'Password',
-                          Icons.lock_rounded,
-                          (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Password is required';
-                            if (value.length < 6)
-                              return 'Password must be at least 6 characters';
-                            return null;
-                          },
-                          obscureText: true,
-                        ),
+                        Obx(() {
+                          final obscure = !controller.showPassword.value;
+                          return _buildTextField(
+                            _passwordController,
+                            'Password',
+                            Icons.lock_rounded,
+                            (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Password is required';
+                              if (value.length < 6)
+                                return 'Password must be at least 6 characters';
+                              return null;
+                            },
+                            obscureText: obscure,
+                          );
+                        }),
                         const SizedBox(height: 10),
-                        _buildTextField(
-                          _confirmPasswordController,
-                          'Confirm Password',
-                          Icons.lock_rounded,
-                          (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Confirmation is required';
-                            if (value != _passwordController.text)
-                              return "Passwords don't match";
-                            return null;
-                          },
-                          obscureText: true,
-                        ),
+                        Obx(() {
+                          final obscure = !controller.showPassword.value;
+                          return _buildTextField(
+                            _confirmPasswordController,
+                            'Confirm Password',
+                            Icons.lock_rounded,
+                            (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Confirmation is required';
+                              if (value != _passwordController.text)
+                                return "Passwords don't match";
+                              return null;
+                            },
+                            obscureText: obscure,
+                          );
+                        }),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
