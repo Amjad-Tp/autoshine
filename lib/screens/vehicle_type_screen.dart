@@ -4,6 +4,7 @@ import 'package:autoshine/values/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class VehicleTypeScreen extends StatelessWidget {
   const VehicleTypeScreen({super.key});
@@ -73,18 +74,14 @@ class VehicleTypeScreen extends StatelessWidget {
                         '4 WHEELER',
                         'assets/cars/polo.png',
                         250,
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) => CarAddScreen()),
-                        ),
+                        () => Get.off(CarAddScreen()),
                       ),
                       const SizedBox(height: 20),
                       vehicleButton(
                         '2 WHEELER',
                         'assets/cars/xpulse.png',
                         220,
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (ctx) => BikeAddScreen()),
-                        ),
+                        () => Get.off(BikeAddScreen()),
                       ),
                     ],
                   ),

@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:autoshine/screens/cart_screen.dart';
 import 'package:autoshine/screens/home/notification_screen.dart';
 import 'package:autoshine/screens/home/search_screen.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,12 +59,15 @@ class CustomAppBar extends StatelessWidget {
   }
 }
 
+//------Home Screen App bar------
+
 class HomeAppbar extends StatelessWidget {
   const HomeAppbar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+
     return Container(
       width: double.infinity,
       height: 185,
@@ -75,15 +82,13 @@ class HomeAppbar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              // Top Row: Welcome and Icons
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Welcome Text
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -105,7 +110,7 @@ class HomeAppbar extends StatelessWidget {
                     ],
                   ),
 
-                  // Icon Row
+                  // Icons
                   Row(
                     children: [
                       iconButton(
@@ -127,14 +132,77 @@ class HomeAppbar extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  onPressed: () => Get.toNamed('/vehicletype'),
-                  label: Text('Add Vehicle'),
-                  icon: Icon(Icons.add_rounded),
-                  style: TextButton.styleFrom(foregroundColor: whiteColor),
-                ),
+              // Vehicle section with Add button
+              FutureBuilder<QuerySnapshot>(
+                future:
+                    FirebaseFirestore.instance
+                        .collection('vehicles')
+                        .where('userId', isEqualTo: user?.uid)
+                        .limit(1)
+                        .get(),
+                builder: (context, snapshot) {
+                  final hasVehicle =
+                      snapshot.hasData && snapshot.data!.docs.isNotEmpty;
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (hasVehicle)
+                        Builder(
+                          builder: (_) {
+                            final data =
+                                snapshot.data!.docs.first.data()
+                                    as Map<String, dynamic>;
+                            final vehicle = VehicleTypeModel.fromJson(data);
+
+                            return Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      vehicle.vehicleImagePath.isNotEmpty
+                                          ? FileImage(
+                                            File(vehicle.vehicleImagePath),
+                                          )
+                                          : AssetImage(
+                                            'assets/icons/before_login/sedan_white.png',
+                                          ),
+                                ),
+                                const SizedBox(width: 7),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      vehicle.brandName,
+                                      style: TextStyle(
+                                        color: whiteColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    Text(
+                                      vehicle.modelName,
+                                      style: TextStyle(
+                                        color: whiteColor,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      TextButton.icon(
+                        onPressed: () => Get.toNamed('/vehicletype'),
+                        label: Text('Add Vehicle'),
+                        icon: Icon(Icons.add_rounded),
+                        style: TextButton.styleFrom(
+                          foregroundColor: whiteColor,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

@@ -13,6 +13,32 @@ class CarAddScreen extends StatelessWidget {
 
   CarAddScreen({super.key});
 
+  final List<Map<String, dynamic>> carBrands = [
+    {'name': 'Maruti Suzuki', 'image': 'assets/car_icons/suzuki.png'},
+    {'name': 'Hyundai', 'image': 'assets/car_icons/hyundai.png'},
+    {'name': 'Tata Motors', 'image': 'assets/car_icons/tata.png'},
+    {'name': 'Mahindra', 'image': 'assets/car_icons/mahindra.png'},
+    {'name': 'Honda', 'image': 'assets/car_icons/honda.png'},
+    {'name': 'Toyota', 'image': 'assets/car_icons/toyota.png'},
+    {'name': 'Kia', 'image': 'assets/car_icons/kia.png'},
+    {'name': 'Renault', 'image': 'assets/car_icons/renault.png'},
+    {'name': 'Volkswagen', 'image': 'assets/car_icons/volkswagen.png'},
+    {'name': 'Skoda', 'image': 'assets/car_icons/skoda.png'},
+    {'name': 'Nissan', 'image': 'assets/car_icons/nissan.png'},
+    {'name': 'MG', 'image': 'assets/car_icons/mg.png'},
+    {'name': 'Citroën', 'image': 'assets/car_icons/citron.png'},
+    {'name': 'Jeep', 'image': 'assets/car_icons/jeep.png'},
+    {'name': 'BMW', 'image': 'assets/car_icons/bmw.png'},
+    {'name': 'Mercedes-Benz', 'image': 'assets/car_icons/benz.png'},
+    {'name': 'Audi', 'image': 'assets/car_icons/audi.png'},
+    {'name': 'Lexus', 'image': 'assets/car_icons/lexus.png'},
+    {'name': 'Volvo', 'image': 'assets/car_icons/volvo.png'},
+    {'name': 'Porsche', 'image': 'assets/car_icons/porsche.png'},
+    {'name': 'Jaguar', 'image': 'assets/car_icons/jaguar.png'},
+    {'name': 'Land Rover', 'image': 'assets/car_icons/landrover.png'},
+    {'name': 'BYD', 'image': 'assets/car_icons/byd.png'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,23 +93,63 @@ class CarAddScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 45),
-            Container(
-              width: 170,
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: const DecorationImage(
-                  image: AssetImage('assets/logo/AutoShine_black_tr.png'),
-                  opacity: .3,
+            const SizedBox(height: 35),
+            Obx(
+              () => GestureDetector(
+                onTap: () => controller.pickImage(),
+                child: Container(
+                  width: 170,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[400],
+                    image:
+                        controller.selectedImage.value == null
+                            ? const DecorationImage(
+                              image: AssetImage(
+                                'assets/logo/AutoShine_black_tr.png',
+                              ),
+                              opacity: 0.3,
+                            )
+                            : DecorationImage(
+                              image: FileImage(controller.selectedImage.value!),
+                              fit: BoxFit.cover,
+                            ),
+                  ),
                 ),
-                color: Colors.grey[400],
               ),
             ),
             const SizedBox(height: 30),
-            TextFormField(
-              controller: controller.brandController,
-              decoration: inputDecoration('Brand Name'),
+            Obx(
+              () => DropdownButtonFormField<String>(
+                decoration: inputDecoration('Select Brand'),
+                value:
+                    controller.selectedBrand.value.isEmpty
+                        ? null
+                        : controller.selectedBrand.value,
+                items:
+                    carBrands.map((brand) {
+                      return DropdownMenuItem<String>(
+                        value: brand['name'],
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 35,
+                              height: 35,
+                              child: Image.asset(brand['image']),
+                            ),
+                            const SizedBox(width: 20),
+                            Text(brand['name']),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    controller.selectedBrand.value = value;
+                  }
+                },
+              ),
             ),
             const SizedBox(height: 15),
             TextFormField(
@@ -104,7 +170,7 @@ class CarAddScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 button(
                   () async {
-                    final brand = controller.brandController.text.trim();
+                    final brand = controller.selectedBrand.value.trim();
                     final model = controller.modelController.text.trim();
                     final selectedType = controller.selectedVehicleType.value;
                     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -122,7 +188,8 @@ class CarAddScreen extends StatelessWidget {
                       category: 'FourWheeler',
                       brandName: brand,
                       modelName: model,
-                      vehicleImagePath: 'some_path_or_url',
+                      vehicleImagePath:
+                          controller.selectedImage.value?.path ?? '',
                     );
 
                     await VehicleService.addVehicle(
@@ -132,7 +199,7 @@ class CarAddScreen extends StatelessWidget {
                     );
 
                     Get.snackbar("Success", "Vehicle added");
-                    Get.offAllNamed('/home');
+                    Get.offNamed('/navbar');
                   },
                   'Done',
                   rockBlue,
