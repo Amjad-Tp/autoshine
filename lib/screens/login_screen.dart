@@ -4,6 +4,7 @@ import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -22,8 +23,12 @@ class LoginScreen extends StatelessWidget {
             if (state is AuthSuccess) {
               Navigator.pushReplacementNamed(context, '/navbar');
             } else if (state is AuthFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Email or Password is invalid')),
+              Get.snackbar(
+                'Error',
+                'Email or Password is invalid',
+                colorText: Colors.red,
+                backgroundColor: whiteColor,
+                snackPosition: SnackPosition.BOTTOM,
               );
             }
           },
@@ -173,11 +178,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                           recognizer:
                               TapGestureRecognizer()
-                                ..onTap =
-                                    () => Navigator.pushReplacementNamed(
-                                      context,
-                                      '/signup',
-                                    ),
+                                ..onTap = () => Get.offNamed('signup'),
                         ),
                       ],
                     ),

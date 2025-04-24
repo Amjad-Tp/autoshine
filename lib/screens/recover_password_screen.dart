@@ -1,12 +1,15 @@
+import 'package:autoshine/services/auth_service.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RecoverPasswordScreen extends StatelessWidget {
   const RecoverPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final AuthService authService = AuthService();
     final recoverEmailController = TextEditingController();
     final recoverFormKey = GlobalKey<FormState>();
     return Scaffold(
@@ -83,9 +86,30 @@ class RecoverPasswordScreen extends StatelessWidget {
                 //Navigate to login screen
                 LoginSignupButton(
                   title: 'Send Email',
-                  navigation: () {
+                  navigation: () async {
                     if (recoverFormKey.currentState!.validate()) {
-                      Navigator.pop(context);
+                      try {
+                        await authService.sendPasswordResetEmail(
+                          recoverEmailController.text,
+                        );
+
+                        Get.snackbar(
+                          'Success',
+                          'Password reset email sent. Check your inbox.',
+                          backgroundColor: whiteColor,
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+
+                        Get.offAllNamed('/login');
+                      } catch (e) {
+                        Get.snackbar(
+                          'Error',
+                          'Failed to send reset email. Try again.',
+                          colorText: Colors.red,
+                          backgroundColor: whiteColor,
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      }
                     }
                   },
                 ),
