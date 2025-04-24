@@ -53,8 +53,8 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    user?.email ?? 'Guest',
-                                    style: TextStyle(fontSize: 16),
+                                    user?.email ?? '',
+                                    style: TextStyle(fontSize: 15),
                                   ),
                                 ],
                               ),

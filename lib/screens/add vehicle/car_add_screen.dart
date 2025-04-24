@@ -1,5 +1,6 @@
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/services/cloudinary_uploader.dart';
 import 'package:autoshine/services/vehicle_services.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/vehicle_category_selector.dart';
@@ -10,6 +11,7 @@ import 'package:icofont_flutter/icofont_flutter.dart';
 
 class CarAddScreen extends StatelessWidget {
   final VehicleAddController controller = Get.put(VehicleAddController());
+  final CloudinaryUploader cloudinaryUploader = CloudinaryUploader();
 
   CarAddScreen({super.key});
 
@@ -183,13 +185,19 @@ class CarAddScreen extends StatelessWidget {
                       return;
                     }
 
+                    String imageUrl = '';
+                    final imageFile = controller.selectedImage.value;
+                    if (imageFile != null) {
+                      imageUrl =
+                          await cloudinaryUploader.uploadImage(imageFile) ?? '';
+                    }
+
                     final vehicle = VehicleTypeModel(
                       vehicleType: selectedType,
                       category: 'FourWheeler',
                       brandName: brand,
                       modelName: model,
-                      vehicleImagePath:
-                          controller.selectedImage.value?.path ?? '',
+                      vehicleImagePath: imageUrl,
                     );
 
                     await VehicleService.addVehicle(

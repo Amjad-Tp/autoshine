@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:autoshine/screens/cart_screen.dart';
 import 'package:autoshine/screens/home/notification_screen.dart';
 import 'package:autoshine/screens/home/search_screen.dart';
+import 'package:autoshine/services/vehicle_services.dart';
 import 'package:autoshine/values/colors.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,44 +14,61 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Container(
       width: double.infinity,
       height: 130,
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Image.asset(
-                'assets/icons/before_login/sedan_white.png',
-                width: 50,
-              ),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Honda, ',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    TextSpan(text: 'Amaze'),
-                  ],
-                ),
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 40, right: 25, left: 25),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FutureBuilder<VehicleTypeModel?>(
+              future: VehicleService.getUserVehicle(user?.uid ?? ''),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return Text(
+                    'No Vehicle',
+                    style: TextStyle(color: whiteColor),
+                  );
+                }
 
-          Row(
-            children: [
-              Icon(Icons.search_rounded, color: whiteColor),
-              Icon(Icons.notifications_active_rounded, color: whiteColor),
-              Icon(Icons.shopping_cart_rounded, color: whiteColor),
-            ],
-          ),
-        ],
+                final vehicle = snapshot.data!;
+                return RichText(
+                  text: TextSpan(
+                    style: TextStyle(fontSize: 20, color: whiteColor),
+                    children: [
+                      TextSpan(
+                        text: '${vehicle.brandName}, ',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      TextSpan(text: vehicle.modelName),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            // Icons
+            Row(
+              children: [
+                iconButton(Icons.search_rounded, () => Get.to(SearchScreen())),
+                iconButton(
+                  Icons.notifications_outlined,
+                  () => Get.to(NotificationScreen()),
+                ),
+                iconButton(
+                  Icons.shopping_cart_rounded,
+                  () => Get.to(CartScreen()),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -133,16 +148,10 @@ class HomeAppbar extends StatelessWidget {
               const SizedBox(height: 10),
 
               // Vehicle section with Add button
-              FutureBuilder<QuerySnapshot>(
-                future:
-                    FirebaseFirestore.instance
-                        .collection('vehicles')
-                        .where('userId', isEqualTo: user?.uid)
-                        .limit(1)
-                        .get(),
+              FutureBuilder<VehicleTypeModel?>(
+                future: VehicleService.getUserVehicle(user?.uid ?? ''),
                 builder: (context, snapshot) {
-                  final hasVehicle =
-                      snapshot.hasData && snapshot.data!.docs.isNotEmpty;
+                  final hasVehicle = snapshot.hasData && snapshot.data != null;
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,22 +159,43 @@ class HomeAppbar extends StatelessWidget {
                       if (hasVehicle)
                         Builder(
                           builder: (_) {
-                            final data =
-                                snapshot.data!.docs.first.data()
-                                    as Map<String, dynamic>;
-                            final vehicle = VehicleTypeModel.fromJson(data);
-
+                            final vehicle = snapshot.data!;
                             return Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      vehicle.vehicleImagePath.isNotEmpty
-                                          ? FileImage(
-                                            File(vehicle.vehicleImagePath),
-                                          )
-                                          : AssetImage(
-                                            'assets/icons/before_login/sedan_white.png',
-                                          ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: whiteColor,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    child:
+                                        vehicle.vehicleImagePath.isNotEmpty
+                                            ? ClipOval(
+                                              child: Image.network(
+                                                vehicle.vehicleImagePath,
+                                              ),
+                                            )
+                                            : Opacity(
+                                              opacity: 0.4,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  3.0,
+                                                ),
+                                                child: Image.asset(
+                                                  'assets/icons/before_login/suv_black.png',
+                                                  fit: BoxFit.cover,
+                                                  width: 50,
+                                                  height: 50,
+                                                ),
+                                              ),
+                                            ),
+                                  ),
                                 ),
                                 const SizedBox(width: 7),
                                 Column(
@@ -176,14 +206,16 @@ class HomeAppbar extends StatelessWidget {
                                       style: TextStyle(
                                         color: whiteColor,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 13,
+                                        fontSize: 16,
+                                        height: 1.1,
                                       ),
                                     ),
                                     Text(
                                       vehicle.modelName,
                                       style: TextStyle(
                                         color: whiteColor,
-                                        fontSize: 15,
+                                        fontSize: 18,
+                                        height: 1.1,
                                       ),
                                     ),
                                   ],
@@ -210,14 +242,14 @@ class HomeAppbar extends StatelessWidget {
       ),
     );
   }
+}
 
-  InkWell iconButton(IconData icon, VoidCallback navigation) {
-    return InkWell(
-      onTap: navigation,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(icon, color: whiteColor),
-      ),
-    );
-  }
+Widget iconButton(IconData icon, VoidCallback navigation) {
+  return InkWell(
+    onTap: navigation,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Icon(icon, color: whiteColor),
+    ),
+  );
 }

@@ -17,4 +17,17 @@ class VehicleService {
       ...vehicle.toJson(),
     });
   }
+
+  static Future<VehicleTypeModel?> getUserVehicle(String userId) async {
+    final snapshot =
+        await _vehicleCollection
+            .where('userId', isEqualTo: userId)
+            .limit(1)
+            .get();
+
+    if (snapshot.docs.isEmpty) return null;
+
+    final data = snapshot.docs.first.data();
+    return VehicleTypeModel.fromJson(data);
+  }
 }
