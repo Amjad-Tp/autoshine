@@ -1,7 +1,7 @@
 import 'package:autoshine/screens/Order_screen.dart';
 import 'package:autoshine/screens/cart_screen.dart';
 import 'package:autoshine/screens/home/home_screen.dart';
-import 'package:autoshine/screens/profile_screen.dart';
+import 'package:autoshine/screens/profile/profile_screen.dart';
 import 'package:autoshine/screens/support_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -63,8 +63,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: Image.asset('assets/icons/grey icons/Order.png'),
-              selectedIcon: Image.asset('assets/icons/Order.png'),
+              icon: Image.asset('assets/icons/grey icons/support.png'),
+              selectedIcon: Image.asset('assets/icons/support.png'),
               title: const Text(
                 "Support",
                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
