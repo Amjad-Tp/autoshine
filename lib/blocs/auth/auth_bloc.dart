@@ -64,6 +64,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
+    // // Google Login
+    // on<AuthGoogleLoginRequested>((event, emit) async {
+    //   emit(AuthLoading());
+    //   try {
+    //     final user = await authService.signInWithGoogle();
+    //     if (user != null) {
+    //       emit(AuthSuccess(userId: user.uid));
+    //     } else {
+    //       emit(AuthFailed(error: 'Google sign in failed!!!!!!!!'));
+    //     }
+    //   } catch (e) {
+    //     log('Google Sign in Failed : $e');
+    //     emit(AuthFailed(error: 'Google sign in failed'));
+    //   }
+    // });
+
+    // // Facebook Login
+    // on<AuthFacebookLoginRequested>((event, emit) async {
+    //   emit(AuthLoading());
+    //   try {
+    //     final user = await authService.signInWithFacebook();
+    //     if (user != null) {
+    //       emit(AuthSuccess(userId: user.uid));
+    //     } else {
+    //       emit(AuthFailed(error: 'Facebook sign in failed'));
+    //     }
+    //   } catch (e) {
+    //     emit(AuthFailed(error: 'Facebook sign in failed'));
+    //   }
+    // });
+
+    // // Twitter Login
+    // on<AuthTwitterLoginRequested>((event, emit) async {
+    //   emit(AuthLoading());
+    //   try {
+    //     final user = await authService.signInWithTwitter();
+    //     if (user != null) {
+    //       emit(AuthSuccess(userId: user.uid));
+    //     } else {
+    //       emit(AuthFailed(error: 'Twitter sign in failed'));
+    //     }
+    //   } catch (e) {
+    //     emit(AuthFailed(error: 'Twitter sign in failed'));
+    //   }
+    // });
+
     //Logout
     on<AuthLogoutRequested>((event, emit) async {
       emit(AuthLoading());

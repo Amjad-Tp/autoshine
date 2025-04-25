@@ -12,7 +12,20 @@
           "package_name": "com.example.autoshine"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "380810622513-au6o8vsjqneje37tnubvir657r8kguc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.autoshine",
+            "certificate_hash": "a87bcd3ac77e2dc8d5525352e9bd435fec59b43a"
+          }
+        },
+        {
+          "client_id": "380810622513-2mm9bfjqgph18i16tc4u9ifl8ajf8qqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDS66qIIGIU7jO8EC7wTE_hlBNiGuiS2Fg"
@@ -20,7 +33,55 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380810622513-2mm9bfjqgph18i16tc4u9ifl8ajf8qqf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "380810622513-c689l5ev7hl7n9chpjh38pneedrjhoj2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.autoshineAdmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380810622513:android:a67e423115bb51960f4710",
+        "android_client_info": {
+          "package_name": "com.example.autoshine_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "380810622513-2mm9bfjqgph18i16tc4u9ifl8ajf8qqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS66qIIGIU7jO8EC7wTE_hlBNiGuiS2Fg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380810622513-2mm9bfjqgph18i16tc4u9ifl8ajf8qqf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "380810622513-c689l5ev7hl7n9chpjh38pneedrjhoj2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.autoshineAdmin"
+              }
+            }
+          ]
         }
       }
     }

@@ -1,4 +1,5 @@
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
+import 'package:autoshine/services/auth_service.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
@@ -15,6 +16,8 @@ class LoginScreen extends StatelessWidget {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
+    final AuthService authService = AuthService();
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
@@ -25,7 +28,8 @@ class LoginScreen extends StatelessWidget {
             } else if (state is AuthFailed) {
               Get.snackbar(
                 'Error',
-                'Email or Password is invalid',
+                // 'Email or Password is invalid',
+                state.error,
                 colorText: Colors.red,
                 backgroundColor: whiteColor,
                 snackPosition: SnackPosition.BOTTOM,
@@ -141,7 +145,10 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () async {
+                            await authService.signInWithGoogle();
+                            Get.offNamed('/navbar');
+                          },
                           child: Image.asset(
                             'assets/icons/before_login/google_logo_white.png',
                             width: 29,

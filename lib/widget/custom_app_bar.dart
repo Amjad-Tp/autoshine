@@ -57,21 +57,6 @@ class CustomAppBar extends StatelessWidget {
               Icons.notifications_outlined,
               () => Get.to(NotificationScreen()),
             ),
-
-            // Icons
-            // Row(
-            //   children: [
-            //     iconButton(Icons.search_rounded, () => Get.to(SearchScreen())),
-            //     iconButton(
-            //       Icons.notifications_outlined,
-            //       () => Get.to(NotificationScreen()),
-            //     ),
-            //     iconButton(
-            //       Icons.shopping_cart_rounded,
-            //       () => Get.to(CartScreen()),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),
@@ -216,7 +201,7 @@ class HomeAppbar extends StatelessWidget {
                                       vehicle.modelName,
                                       style: TextStyle(
                                         color: whiteColor,
-                                        fontSize: 18,
+                                        fontSize: 17,
                                         height: 1.1,
                                       ),
                                     ),
