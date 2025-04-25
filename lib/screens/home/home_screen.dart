@@ -121,9 +121,13 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 20),
                           Obx(() {
                             if (serviceController.isLoading.value) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 40),
-                                child: CircularProgressIndicator(),
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 40,
+                                ),
+                                child: CircularProgressIndicator(
+                                  color: blackColor,
+                                ),
                               );
                             }
 
@@ -143,13 +147,14 @@ class HomeScreen extends StatelessWidget {
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 25,
                                     mainAxisSpacing: 20,
-                                    childAspectRatio: 1 / 1.2,
+                                    childAspectRatio: 1 / 1.5,
                                   ),
                               itemCount: serviceController.services.length,
                               itemBuilder: (context, index) {
                                 final service =
                                     serviceController.services[index];
                                 return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
                                       radius: 40,
@@ -161,8 +166,11 @@ class HomeScreen extends StatelessWidget {
                                     const SizedBox(height: 5),
                                     Text(
                                       service.name,
-                                      style: TextStyle(fontSize: 12),
-                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ],
                                 );

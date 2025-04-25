@@ -1,3 +1,4 @@
+import 'package:autoshine/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -5,6 +6,13 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Order Screen')));
+    return const Scaffold(
+      body: Column(
+        children: [
+          CustomAppBar(),
+          Expanded(child: Center(child: Text('Order Screen'))),
+        ],
+      ),
+    );
   }
 }

@@ -14,6 +14,8 @@ class VehicleAddController extends GetxController {
 
   Rx<File?> selectedImage = Rx<File?>(null);
 
+  var isSubmitting = false.obs;
+
   void selectType(String type) {
     selectedVehicleType.value = type;
   }

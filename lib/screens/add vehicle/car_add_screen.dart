@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:autoshine/services/cloudinary_uploader.dart';
@@ -43,182 +45,229 @@ class CarAddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldColor,
-      appBar: AppBar(
-        title: const Text(
-          'Add Your Four Wheeler',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        backgroundColor: scaffoldColor,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        child: Column(
-          children: [
-            Card(
-              elevation: 10,
-              color: whiteColor,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(22, 22, 22, 12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Obx(
-                      () => vehicleTypeSelector(
-                        type: 'Hatchback',
-                        selectedType: controller.selectedVehicleType.value,
-                        onSelect: controller.selectType,
-                        title: 'Hatchback type',
-                        icon: IcoFontIcons.carAlt3,
-                      ),
-                    ),
-                    Obx(
-                      () => vehicleTypeSelector(
-                        type: 'Sedan',
-                        selectedType: controller.selectedVehicleType.value,
-                        onSelect: controller.selectType,
-                        title: 'Sedan type',
-                        icon: IcoFontIcons.carAlt2,
-                      ),
-                    ),
-                    Obx(
-                      () => vehicleTypeSelector(
-                        type: 'SUV/MUV',
-                        selectedType: controller.selectedVehicleType.value,
-                        onSelect: controller.selectType,
-                        title: 'SUV or MUV type',
-                        icon: IcoFontIcons.carAlt1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: scaffoldColor,
+          appBar: AppBar(
+            title: const Text(
+              'Add Your Four Wheeler',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 35),
-            Obx(
-              () => GestureDetector(
-                onTap: () => controller.pickImage(),
-                child: Container(
-                  width: 170,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[400],
-                    image:
-                        controller.selectedImage.value == null
-                            ? const DecorationImage(
-                              image: AssetImage(
-                                'assets/logo/AutoShine_black_tr.png',
-                              ),
-                              opacity: 0.3,
-                            )
-                            : DecorationImage(
-                              image: FileImage(controller.selectedImage.value!),
-                              fit: BoxFit.cover,
-                            ),
+            backgroundColor: scaffoldColor,
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            child: Column(
+              children: [
+                Card(
+                  elevation: 10,
+                  color: whiteColor,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(22, 22, 22, 12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Obx(
+                          () => vehicleTypeSelector(
+                            type: 'Hatchback',
+                            selectedType: controller.selectedVehicleType.value,
+                            onSelect: controller.selectType,
+                            title: 'Hatchback type',
+                            icon: IcoFontIcons.carAlt3,
+                          ),
+                        ),
+                        Obx(
+                          () => vehicleTypeSelector(
+                            type: 'Sedan',
+                            selectedType: controller.selectedVehicleType.value,
+                            onSelect: controller.selectType,
+                            title: 'Sedan type',
+                            icon: IcoFontIcons.carAlt2,
+                          ),
+                        ),
+                        Obx(
+                          () => vehicleTypeSelector(
+                            type: 'SUV/MUV',
+                            selectedType: controller.selectedVehicleType.value,
+                            onSelect: controller.selectType,
+                            title: 'SUV or MUV type',
+                            icon: IcoFontIcons.carAlt1,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Obx(
-              () => DropdownButtonFormField<String>(
-                decoration: inputDecoration('Select Brand'),
-                value:
-                    controller.selectedBrand.value.isEmpty
-                        ? null
-                        : controller.selectedBrand.value,
-                items:
-                    carBrands.map((brand) {
-                      return DropdownMenuItem<String>(
-                        value: brand['name'],
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 35,
-                              height: 35,
-                              child: Image.asset(brand['image']),
-                            ),
-                            const SizedBox(width: 20),
-                            Text(brand['name']),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    controller.selectedBrand.value = value;
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 15),
-            TextFormField(
-              controller: controller.modelController,
-              decoration: inputDecoration('Model Name'),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                button(
-                  () => Get.back(),
-                  'Back',
-                  rockBlue,
-                  Colors.transparent,
-                  rockBlue,
+                const SizedBox(height: 35),
+                Obx(
+                  () => GestureDetector(
+                    onTap: () => controller.pickImage(),
+                    child: Container(
+                      width: 170,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[400],
+                        image:
+                            controller.selectedImage.value == null
+                                ? const DecorationImage(
+                                  image: AssetImage(
+                                    'assets/logo/AutoShine_black_tr.png',
+                                  ),
+                                  opacity: 0.3,
+                                )
+                                : DecorationImage(
+                                  image: FileImage(
+                                    controller.selectedImage.value!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 12),
-                button(
-                  () async {
-                    final brand = controller.selectedBrand.value.trim();
-                    final model = controller.modelController.text.trim();
-                    final selectedType = controller.selectedVehicleType.value;
-                    final userId = FirebaseAuth.instance.currentUser?.uid;
+                const SizedBox(height: 30),
+                Obx(
+                  () => DropdownButtonFormField<String>(
+                    decoration: inputDecoration('Select Brand'),
+                    value:
+                        controller.selectedBrand.value.isEmpty
+                            ? null
+                            : controller.selectedBrand.value,
+                    items:
+                        carBrands.map((brand) {
+                          return DropdownMenuItem<String>(
+                            value: brand['name'],
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Image.asset(brand['image']),
+                                ),
+                                const SizedBox(width: 20),
+                                Text(brand['name']),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.selectedBrand.value = value;
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: controller.modelController,
+                  decoration: inputDecoration('Model Name'),
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    button(
+                      () => Get.back(),
+                      'Back',
+                      rockBlue,
+                      Colors.transparent,
+                      rockBlue,
+                    ),
+                    const SizedBox(width: 12),
+                    Obx(() {
+                      return controller.isSubmitting.value
+                          ? const SizedBox()
+                          : button(
+                            () {
+                              () async {
+                                final brand =
+                                    controller.selectedBrand.value.trim();
+                                final model =
+                                    controller.modelController.text.trim();
+                                final selectedType =
+                                    controller.selectedVehicleType.value;
+                                final userId =
+                                    FirebaseAuth.instance.currentUser?.uid;
 
-                    if (userId == null ||
-                        brand.isEmpty ||
-                        model.isEmpty ||
-                        selectedType.isEmpty) {
-                      Get.snackbar("Error", "Please fill all fields");
-                      return;
-                    }
+                                if (userId == null ||
+                                    brand.isEmpty ||
+                                    model.isEmpty ||
+                                    selectedType.isEmpty) {
+                                  Get.snackbar(
+                                    "Error",
+                                    "Please fill all fields",
+                                  );
+                                  return;
+                                }
 
-                    String imageUrl = '';
-                    final imageFile = controller.selectedImage.value;
-                    if (imageFile != null) {
-                      imageUrl =
-                          await cloudinaryUploader.uploadImage(imageFile) ?? '';
-                    }
+                                controller.isSubmitting.value = true;
 
-                    final vehicle = VehicleTypeModel(
-                      vehicleType: selectedType,
-                      category: 'FourWheeler',
-                      brandName: brand,
-                      modelName: model,
-                      vehicleImagePath: imageUrl,
-                    );
+                                try {
+                                  String imageUrl = '';
+                                  final imageFile =
+                                      controller.selectedImage.value;
+                                  if (imageFile != null) {
+                                    imageUrl =
+                                        await cloudinaryUploader.uploadImage(
+                                          imageFile,
+                                        ) ??
+                                        '';
+                                  }
 
-                    await VehicleService.addVehicle(
-                      userId: userId,
-                      vehicle: vehicle,
-                      isTwoWheeler: false,
-                    );
+                                  final vehicle = VehicleTypeModel(
+                                    vehicleType: selectedType,
+                                    category: 'FourWheeler',
+                                    brandName: brand,
+                                    modelName: model,
+                                    vehicleImagePath: imageUrl,
+                                  );
 
-                    Get.snackbar("Success", "Vehicle added");
-                    Get.offNamed('/navbar');
-                  },
-                  'Done',
-                  rockBlue,
-                  rockBlue,
-                  whiteColor,
+                                  await VehicleService.addVehicle(
+                                    userId: userId,
+                                    vehicle: vehicle,
+                                    isTwoWheeler: false,
+                                  );
+
+                                  Get.snackbar("Success", "Vehicle added");
+                                  Get.offNamed('/navbar');
+                                } catch (e) {
+                                  Get.snackbar("Error", "Something went wrong");
+                                } finally {
+                                  controller.isSubmitting.value = false;
+                                }
+                              }();
+                            },
+                            'Done',
+                            rockBlue,
+                            rockBlue,
+                            whiteColor,
+                          );
+                    }),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+        // --- Fullscreen Loader Overlay ---
+        Obx(() {
+          if (!controller.isSubmitting.value) return const SizedBox();
+          return Container(
+            color: Colors.black.withOpacity(0.3),
+            child: Stack(
+              children: [
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(color: Colors.black.withValues(alpha: .4)),
+                ),
+                Center(child: CircularProgressIndicator(color: whiteColor)),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 

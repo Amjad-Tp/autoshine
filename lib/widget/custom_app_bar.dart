@@ -7,10 +7,10 @@ import 'package:autoshine/values/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:icofont_flutter/icofont_flutter.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final String title;
-  const CustomAppBar({super.key, required this.title});
+  const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +53,25 @@ class CustomAppBar extends StatelessWidget {
               },
             ),
 
-            // Icons
-            Row(
-              children: [
-                iconButton(Icons.search_rounded, () => Get.to(SearchScreen())),
-                iconButton(
-                  Icons.notifications_outlined,
-                  () => Get.to(NotificationScreen()),
-                ),
-                iconButton(
-                  Icons.shopping_cart_rounded,
-                  () => Get.to(CartScreen()),
-                ),
-              ],
+            iconButton(
+              Icons.notifications_outlined,
+              () => Get.to(NotificationScreen()),
             ),
+
+            // Icons
+            // Row(
+            //   children: [
+            //     iconButton(Icons.search_rounded, () => Get.to(SearchScreen())),
+            //     iconButton(
+            //       Icons.notifications_outlined,
+            //       () => Get.to(NotificationScreen()),
+            //     ),
+            //     iconButton(
+            //       Icons.shopping_cart_rounded,
+            //       () => Get.to(CartScreen()),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -98,7 +103,7 @@ class HomeAppbar extends StatelessWidget {
           padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
           child: Column(
             children: [
-              // Top Row: Welcome and Icons
+              // Welcome and Icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -187,11 +192,8 @@ class HomeAppbar extends StatelessWidget {
                                                 padding: const EdgeInsets.all(
                                                   3.0,
                                                 ),
-                                                child: Image.asset(
-                                                  'assets/icons/before_login/suv_black.png',
-                                                  fit: BoxFit.cover,
-                                                  width: 50,
-                                                  height: 50,
+                                                child: Icon(
+                                                  IcoFontIcons.carAlt2,
                                                 ),
                                               ),
                                             ),
