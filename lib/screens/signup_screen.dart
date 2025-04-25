@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
 import 'package:autoshine/controller/sign_up_controller.dart';
 import 'package:autoshine/values/colors.dart';
@@ -39,100 +41,107 @@ class SignupScreen extends StatelessWidget {
               Get.snackbar('Message', state.message);
             }
           },
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
+          child: BlocBuilder<AuthBloc, AuthState>(
+            bloc: controller.authBloc,
+            builder: (context, state) {
+              return Stack(
                 children: [
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 330,
-                    height: 220,
-                    child: Image.asset('assets/others/login_screen.png'),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Sign up',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 33),
-                  ),
-                  const SizedBox(height: 15),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _buildTextField(
-                          _emailController,
-                          'Email',
-                          Icons.email_rounded,
-                          (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter your email';
-                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value))
-                              return 'Enter a valid email';
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        _buildTextField(
-                          _nameController,
-                          'Name',
-                          Icons.person_rounded,
-                          (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Name is required';
-                            if (value.contains(' '))
-                              return 'Name cannot contain spaces';
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        Obx(() {
-                          final obscure = !controller.showPassword.value;
-                          return _buildTextField(
-                            _passwordController,
-                            'Password',
-                            Icons.lock_rounded,
-                            (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Password is required';
-                              if (value.length < 6)
-                                return 'Password must be at least 6 characters';
-                              return null;
-                            },
-                            obscureText: obscure,
-                          );
-                        }),
-                        const SizedBox(height: 10),
-                        Obx(() {
-                          final obscure = !controller.showPassword.value;
-                          return _buildTextField(
-                            _confirmPasswordController,
-                            'Confirm Password',
-                            Icons.lock_rounded,
-                            (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Confirmation is required';
-                              if (value != _passwordController.text)
-                                return "Passwords don't match";
-                              return null;
-                            },
-                            obscureText: obscure,
-                          );
-                        }),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    bloc: controller.authBloc,
-                    builder: (context, state) {
-                      return Column(
+                  SingleChildScrollView(
+                    child: Center(
+                      child: Column(
                         children: [
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: 330,
+                            height: 220,
+                            child: Image.asset(
+                              'assets/others/login_screen.png',
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'Sign up',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 33,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                _buildTextField(
+                                  _emailController,
+                                  'Email',
+                                  Icons.email_rounded,
+                                  (value) {
+                                    if (value == null || value.isEmpty)
+                                      return 'Please enter your email';
+                                    if (!RegExp(
+                                      r'^[^@]+@[^@]+\.[^@]+',
+                                    ).hasMatch(value)) {
+                                      return 'Enter a valid email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                _buildTextField(
+                                  _nameController,
+                                  'Name',
+                                  Icons.person_rounded,
+                                  (value) {
+                                    if (value == null || value.isEmpty)
+                                      return 'Name is required';
+                                    if (value.contains(' '))
+                                      return 'Name cannot contain spaces';
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                Obx(() {
+                                  final obscure =
+                                      !controller.showPassword.value;
+                                  return _buildTextField(
+                                    _passwordController,
+                                    'Password',
+                                    Icons.lock_rounded,
+                                    (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Password is required';
+                                      if (value.length < 6)
+                                        return 'Password must be at least 6 characters';
+                                      return null;
+                                    },
+                                    obscureText: obscure,
+                                  );
+                                }),
+                                const SizedBox(height: 10),
+                                Obx(() {
+                                  final obscure =
+                                      !controller.showPassword.value;
+                                  return _buildTextField(
+                                    _confirmPasswordController,
+                                    'Confirm Password',
+                                    Icons.lock_rounded,
+                                    (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Confirmation is required';
+                                      if (value != _passwordController.text)
+                                        return "Passwords don't match";
+                                      return null;
+                                    },
+                                    obscureText: obscure,
+                                  );
+                                }),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 25),
                           LoginSignupButton(
-                            title:
-                                state is AuthLoading
-                                    ? 'Signing Up...'
-                                    : 'Sign Up',
+                            title: 'Sign Up',
                             navigation: () {
                               if (_formKey.currentState!.validate()) {
                                 final email = _emailController.text.trim();
@@ -150,6 +159,7 @@ class SignupScreen extends StatelessWidget {
                               }
                             },
                           ),
+                          const SizedBox(height: 10),
                           Obx(
                             () => TextButton(
                               onPressed:
@@ -173,22 +183,28 @@ class SignupScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 20),
+                          _buildLoginRedirect(),
                         ],
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    '_______ or Sign up with _______',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(height: 15),
-                  _buildSocialLoginButtons(),
-                  const SizedBox(height: 15),
-                  _buildLoginRedirect(),
+
+                  // Blur and loading indicator
+                  if (state is AuthLoading)
+                    Positioned.fill(
+                      child: Stack(
+                        children: [
+                          Container(color: whiteColor),
+                          Center(
+                            child: CircularProgressIndicator(color: rockBlue),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -211,48 +227,11 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialLoginButtons() {
-    return Container(
-      width: 215,
-      height: 45,
-      decoration: BoxDecoration(
-        color: rockBlue,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          InkWell(
-            onTap: () {},
-            child: Image.asset(
-              'assets/icons/before_login/google_logo_white.png',
-              width: 29,
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Image.asset(
-              'assets/icons/before_login/facebook_white.png',
-              width: 35,
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Image.asset(
-              'assets/icons/before_login/Twitter-x_-white.png',
-              width: 28,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLoginRedirect() {
     return RichText(
       text: TextSpan(
         text: "Already have an account? ",
-        style: TextStyle(color: blackColor),
+        style: TextStyle(color: blackColor, fontSize: 16),
         children: [
           TextSpan(
             text: 'Login',
