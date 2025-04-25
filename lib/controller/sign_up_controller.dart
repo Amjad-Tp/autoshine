@@ -32,7 +32,7 @@ class SignupController extends GetxController {
 
       if (refreshedUser?.emailVerified ?? false) {
         timer.cancel();
-        Get.offAllNamed('/home');
+        Get.offAllNamed('/navbar');
       }
     });
   }

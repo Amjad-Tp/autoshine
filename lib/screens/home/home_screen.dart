@@ -1,14 +1,17 @@
+import 'package:autoshine/controller/user_service_controller.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_app_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final serviceController = Get.put(UserServiceController());
     final List<String> imagePaths = List.generate(
       6,
       (index) => 'assets/washing pictures/slider ${index + 1}.jpg',
@@ -54,82 +57,119 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 15),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Card(
-                      elevation: 10,
-                      color: whiteColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 16,
+                            color: blackColor.withValues(alpha: .3),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Hello ${user?.displayName ?? 'Guest'},',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    'Services you may need...',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              GestureDetector(
+                                onTap: () {
+                                  // All Service page Navigation
+                                },
+                                child: Row(
                                   children: [
                                     Text(
-                                      'Hello ${user?.displayName ?? 'Guest'},',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      'Services you may need...',
+                                      'See All',
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.blue,
                                       ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 15,
+                                      color: Colors.blue,
                                     ),
                                   ],
                                 ),
+                              ),
+                            ],
+                          ),
 
-                                GestureDetector(
-                                  onTap: () {
-                                    // All Service page Navigation
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'See All',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 15,
-                                        color: Colors.blue,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            GridView.builder(
+                          const SizedBox(height: 20),
+                          Obx(() {
+                            if (serviceController.isLoading.value) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 40),
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            if (serviceController.services.isEmpty) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text('No services found'),
+                              );
+                            }
+
+                            return GridView.builder(
+                              padding: EdgeInsets.zero,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 25,
-                                    mainAxisSpacing: 25,
+                                    mainAxisSpacing: 20,
+                                    childAspectRatio: 1 / 1.2,
                                   ),
-                              itemCount: 8,
+                              itemCount: serviceController.services.length,
                               itemBuilder: (context, index) {
-                                return CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.grey[400],
-                                  child: Icon(
-                                    Icons.cleaning_services_rounded,
-                                    color: whiteColor,
-                                  ),
+                                final service =
+                                    serviceController.services[index];
+                                return Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                        service.imageUrl,
+                                      ),
+                                      backgroundColor: Colors.grey[300],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      service.name,
+                                      style: TextStyle(fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 );
                               },
-                            ),
-                          ],
-                        ),
+                            );
+                          }),
+                        ],
                       ),
                     ),
                   ),
