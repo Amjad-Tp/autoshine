@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             FutureBuilder<VehicleTypeModel?>(
-              future: VehicleService.getUserVehicle(user?.uid ?? ''),
+              future: VehicleService.getOneVehicle(user?.uid ?? ''),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return Text(
@@ -139,7 +139,7 @@ class HomeAppbar extends StatelessWidget {
 
               // Vehicle section with Add button
               FutureBuilder<VehicleTypeModel?>(
-                future: VehicleService.getUserVehicle(user?.uid ?? ''),
+                future: VehicleService.getOneVehicle(user?.uid ?? ''),
                 builder: (context, snapshot) {
                   final hasVehicle = snapshot.hasData && snapshot.data != null;
 

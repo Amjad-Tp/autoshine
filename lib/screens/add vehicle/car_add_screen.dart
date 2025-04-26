@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 
 class CarAddScreen extends StatelessWidget {
-  final VehicleAddController controller = Get.put(VehicleAddController());
+  final VehicleAddController controller = Get.find<VehicleAddController>();
   final CloudinaryUploader cloudinaryUploader = CloudinaryUploader();
 
   CarAddScreen({super.key});
@@ -255,7 +255,7 @@ class CarAddScreen extends StatelessWidget {
         Obx(() {
           if (!controller.isSubmitting.value) return const SizedBox();
           return Container(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: .3),
             child: Stack(
               children: [
                 BackdropFilter(

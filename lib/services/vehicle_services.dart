@@ -18,7 +18,7 @@ class VehicleService {
     });
   }
 
-  static Future<VehicleTypeModel?> getUserVehicle(String userId) async {
+  static Future<VehicleTypeModel?> getOneVehicle(String userId) async {
     final snapshot =
         await _vehicleCollection
             .where('userId', isEqualTo: userId)
@@ -29,5 +29,14 @@ class VehicleService {
 
     final data = snapshot.docs.first.data();
     return VehicleTypeModel.fromJson(data);
+  }
+
+  static Future<List<VehicleTypeModel>> fetchVehicles(String userId) async {
+    final snapshot =
+        await _vehicleCollection.where('userId', isEqualTo: userId).get();
+
+    return snapshot.docs.map((doc) {
+      return VehicleTypeModel.fromJson(doc.data());
+    }).toList();
   }
 }

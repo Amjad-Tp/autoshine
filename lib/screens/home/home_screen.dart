@@ -1,4 +1,6 @@
 import 'package:autoshine/controller/user_service_controller.dart';
+import 'package:autoshine/screens/all_services_screen.dart';
+import 'package:autoshine/screens/services_Details_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_app_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -94,9 +96,7 @@ class HomeScreen extends StatelessWidget {
                               ),
 
                               GestureDetector(
-                                onTap: () {
-                                  // All Service page Navigation
-                                },
+                                onTap: () => Get.to(() => AllServicesScreen()),
                                 child: Row(
                                   children: [
                                     Text(
@@ -153,26 +153,35 @@ class HomeScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final service =
                                     serviceController.services[index];
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage: NetworkImage(
-                                        service.imageUrl,
+                                return GestureDetector(
+                                  onTap:
+                                      () => Get.to(
+                                        () => ServiceDetailsScreen(
+                                          service: service,
+                                        ),
                                       ),
-                                      backgroundColor: Colors.grey[300],
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      service.name,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                          service.imageUrl,
+                                        ),
+                                        backgroundColor: Colors.grey[300],
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        service.name,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 );
                               },
                             );
