@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
 import 'package:autoshine/controller/sign_up_controller.dart';
+import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/login_signup.dart';
 import 'package:flutter/gestures.dart';
@@ -30,13 +31,12 @@ class SignupScreen extends StatelessWidget {
           bloc: controller.authBloc,
           listener: (context, state) {
             if (state is AuthSuccess) {
-              Get.snackbar(
-                'Success',
+              successSnackBar(
                 'Verification email sent. Please check your email.',
               );
               controller.startEmailVerificationCheck();
             } else if (state is AuthFailed) {
-              Get.snackbar('Error', state.error);
+              errorSnackBar(state.error);
             } else if (state is AuthVerificationEmailSent) {
               Get.snackbar('Message', state.message);
             }
