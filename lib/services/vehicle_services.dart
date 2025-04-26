@@ -31,12 +31,14 @@ class VehicleService {
     return VehicleTypeModel.fromJson(data);
   }
 
-  static Future<List<VehicleTypeModel>> fetchVehicles(String userId) async {
-    final snapshot =
-        await _vehicleCollection.where('userId', isEqualTo: userId).get();
-
-    return snapshot.docs.map((doc) {
-      return VehicleTypeModel.fromJson(doc.data());
-    }).toList();
+  static Stream<List<VehicleTypeModel>> fetchVehicles(String userId) {
+    return _vehicleCollection
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            return VehicleTypeModel.fromJson(doc.data());
+          }).toList();
+        });
   }
 }

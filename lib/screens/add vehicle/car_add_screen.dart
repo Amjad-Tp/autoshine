@@ -231,7 +231,7 @@ class CarAddScreen extends StatelessWidget {
                                   );
 
                                   Get.snackbar("Success", "Vehicle added");
-                                  Get.offNamed('/navbar');
+                                  Get.offAllNamed('/navbar');
                                 } catch (e) {
                                   Get.snackbar("Error", "Something went wrong");
                                 } finally {

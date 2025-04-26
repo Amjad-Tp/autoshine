@@ -50,23 +50,24 @@ class VehicleAddController extends GetxController {
     return await storageRef.getDownloadURL();
   }
 
-  void fetchVehicles() async {
+  void fetchVehicles() {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
-    final vehicleList = await VehicleService.fetchVehicles(uid);
-    vehicles.value =
-        vehicleList
-            .map(
-              (v) => VehicleTypeModel(
-                vehicleType: v.vehicleType,
-                brandName: v.brandName,
-                modelName: v.modelName,
-                category: v.category,
-                vehicleImagePath: v.vehicleImagePath,
-              ),
-            )
-            .toList();
+    VehicleService.fetchVehicles(uid).listen((vehicleList) {
+      vehicles.value =
+          vehicleList
+              .map(
+                (v) => VehicleTypeModel(
+                  vehicleType: v.vehicleType,
+                  brandName: v.brandName,
+                  modelName: v.modelName,
+                  category: v.category,
+                  vehicleImagePath: v.vehicleImagePath,
+                ),
+              )
+              .toList();
+    });
   }
 
   @override
