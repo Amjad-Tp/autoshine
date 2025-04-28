@@ -13,7 +13,7 @@ void errorSnackBar(String message) {
 
 void successSnackBar(String message) {
   Get.snackbar(
-    'Error',
+    'Success',
     message,
     colorText: const Color(0xFF2E7B30),
     backgroundColor: whiteColor,

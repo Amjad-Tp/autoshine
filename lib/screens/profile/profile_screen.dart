@@ -86,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
                     //-----Wishlist
                     ProfileCardItem(
                       navigation: () => Get.to(Wishlist()),
-                      title: 'Saved Address',
+                      title: 'WishList',
                       iconImagePath: 'assets/icons/user profile/wishlist.png',
                     ),
 
@@ -104,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                     //-----Contact Support
                     ProfileCardItem(
                       navigation: () => Get.to(SupportScreen()),
-                      title: 'Terms and Conditions',
+                      title: 'Contact Support',
                       iconImagePath: 'assets/icons/user profile/support.png',
                     ),
 

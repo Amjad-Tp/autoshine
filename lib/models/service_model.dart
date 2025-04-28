@@ -13,7 +13,6 @@ class ServiceModel {
     required this.imageUrl,
   });
 
-  // From Firestore
   factory ServiceModel.fromMap(Map<String, dynamic> map) {
     return ServiceModel(
       id: map['id'] ?? '',

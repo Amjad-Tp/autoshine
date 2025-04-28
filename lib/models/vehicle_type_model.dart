@@ -13,7 +13,6 @@ class VehicleTypeModel {
     required this.vehicleImagePath,
   });
 
-  // Convert JSON to VehicleTypeModel
   factory VehicleTypeModel.fromJson(Map<String, dynamic> json) {
     return VehicleTypeModel(
       vehicleType: json['vehicleType'] as String,
@@ -24,7 +23,6 @@ class VehicleTypeModel {
     );
   }
 
-  // Convert VehicleTypeModel to JSON (for Firestore)
   Map<String, dynamic> toJson() {
     return {
       'vehicleType': vehicleType,
