@@ -1,4 +1,6 @@
+import 'package:autoshine/models/address_model.dart';
 import 'package:autoshine/screens/profile/add_address_screen.dart';
+import 'package:autoshine/services/address_service.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_container.dart';
 import 'package:autoshine/widget/titled_appbar.dart';
@@ -10,6 +12,8 @@ class SavedAddress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AddressService addressService = AddressService();
+
     return Scaffold(
       backgroundColor: scaffoldColor,
       body: Column(
@@ -18,88 +22,129 @@ class SavedAddress extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: screenPadding,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: GestureDetector(
-                        onTap: () => Get.to(() => AddAddressScreen()),
-                        child: CustomContainer(
-                          padding: EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add_rounded, size: 23),
-                              const SizedBox(width: 10),
-                              Text(
-                                'Add Address',
-                                style: TextStyle(fontSize: 17),
-                              ),
-                            ],
-                          ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: GestureDetector(
+                      onTap: () => Get.to(() => AddAddressScreen()),
+                      child: CustomContainer(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_rounded, size: 23),
+                            const SizedBox(width: 10),
+                            Text('Add Address', style: TextStyle(fontSize: 17)),
+                          ],
                         ),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                    CustomContainer(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Amjad TP',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
+                  //---- Here StreamBuilder to show addresses
+                  StreamBuilder<List<AddressModel>>(
+                    stream: addressService.fetchAllAddress(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(color: rockBlue),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Something went wrong'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text('No address found'));
+                      }
+
+                      final addresses = snapshot.data!;
+
+                      return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemCount: addresses.length,
+                        itemBuilder: (context, index) {
+                          final address = addresses[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: CustomContainer(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${address.firstName} ${address.lastName ?? ''}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          '${address.house}, ${address.city}',
+                                        ),
+                                        Text(address.pinCode),
+                                        if (address.landmark != null &&
+                                            address.landmark!.isNotEmpty)
+                                          Text('Landmark: ${address.landmark}'),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          '+91 ${address.phone}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        if (address.alternativePhone != null &&
+                                            address
+                                                .alternativePhone!
+                                                .isNotEmpty)
+                                          Text(
+                                            'Alt: +91 ${address.alternativePhone}',
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text('TP House,Valakkai,Thalipparamba'),
-                                Text('670142'),
-                                const SizedBox(height: 10),
-                                Text(
-                                  '+91 8089340972',
-                                  style: TextStyle(fontWeight: FontWeight.w500),
-                                ),
-                              ],
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: button(
+                                          () {}, //---Edit functionality
+                                          'Edit',
+                                          editButton,
+                                          BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: button(
+                                          () {}, //---Delete functionality
+                                          'Delete',
+                                          removeButton,
+                                          BorderRadius.only(
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: button(
-                                  () {}, //---------edit Screen navigation
-                                  'Edit',
-                                  editButton,
-                                  BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: button(
-                                  () {}, //---------Delete method
-                                  'Delete',
-                                  removeButton,
-                                  BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),

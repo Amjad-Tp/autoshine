@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/services/cloudinary_uploader.dart';
 import 'package:autoshine/services/vehicle_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,7 +14,6 @@ class VehicleAddController extends GetxController {
   var selectedVehicleType = ''.obs;
   final RxString selectedBrand = ''.obs;
 
-  final brandController = TextEditingController();
   final modelController = TextEditingController();
 
   Rx<File?> selectedImage = Rx<File?>(null);
@@ -21,6 +22,8 @@ class VehicleAddController extends GetxController {
 
   var vehicles = <VehicleTypeModel>[].obs;
   var selectedVehicle = Rxn<VehicleTypeModel>();
+
+  final CloudinaryUploader cloudinaryUploader = CloudinaryUploader();
 
   @override
   void onInit() {
@@ -70,11 +73,56 @@ class VehicleAddController extends GetxController {
     });
   }
 
-  @override
-  void onClose() {
-    brandController.clear();
-    modelController.clear();
+  //Add Vehicle Function
+  Future<void> addVehicle() async {
+    final brand = selectedBrand.value.trim();
+    final model = modelController.text.trim();
+    final selectedType = selectedVehicleType.value;
+    final userId = FirebaseAuth.instance.currentUser?.uid;
 
-    super.onClose();
+    if (userId == null ||
+        brand.isEmpty ||
+        model.isEmpty ||
+        selectedType.isEmpty) {
+      Get.snackbar("Error", "Please fill all fields");
+      return;
+    }
+
+    isSubmitting.value = true;
+
+    try {
+      String imageUrl = '';
+      final imageFile = selectedImage.value;
+      if (imageFile != null) {
+        imageUrl = await cloudinaryUploader.uploadImage(imageFile) ?? '';
+      }
+
+      final vehicle = VehicleTypeModel(
+        vehicleType: selectedType,
+        category: 'FourWheeler',
+        brandName: brand,
+        modelName: model,
+        vehicleImagePath: imageUrl,
+      );
+
+      await VehicleService.addVehicle(
+        userId: userId,
+        vehicle: vehicle,
+        isTwoWheeler: false,
+      );
+
+      successSnackBar('Vehicle Added');
+
+      selectedBrand.value = '';
+      selectedVehicleType.value = '';
+      modelController.clear();
+      selectedImage.value = null;
+
+      Get.offAllNamed('/navbar');
+    } catch (e) {
+      errorSnackBar('Something went wrong');
+    } finally {
+      isSubmitting.value = false;
+    }
   }
 }

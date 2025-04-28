@@ -13,17 +13,17 @@ class VehicleTypeModel {
     required this.vehicleImagePath,
   });
 
-  factory VehicleTypeModel.fromJson(Map<String, dynamic> json) {
+  factory VehicleTypeModel.fromMap(Map<String, dynamic> map) {
     return VehicleTypeModel(
-      vehicleType: json['vehicleType'] as String,
-      category: json['category'] as String,
-      brandName: json['brandName'] as String,
-      modelName: json['modelName'] as String,
-      vehicleImagePath: json['vehicleImagePath'] as String,
+      vehicleType: map['vehicleType'] ?? '',
+      category: map['category'] ?? '',
+      brandName: map['brandName'] ?? '',
+      modelName: map['modelName'] ?? '',
+      vehicleImagePath: map['vehicleImagePath'] ?? '',
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'vehicleType': vehicleType,
       'category': category,

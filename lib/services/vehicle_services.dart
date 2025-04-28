@@ -2,43 +2,40 @@ import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VehicleService {
-  static final _vehicleCollection = FirebaseFirestore.instance.collection(
-    'vehicles',
-  );
+  static final _firestore = FirebaseFirestore.instance;
+  static final _userCollection = _firestore.collection('users');
 
+  // --- Add Vehicle under user's document ---
   static Future<void> addVehicle({
     required String userId,
     required VehicleTypeModel vehicle,
     required bool isTwoWheeler,
   }) async {
-    await _vehicleCollection.add({
-      'userId': userId,
+    await _userCollection.doc(userId).collection('vehicles').add({
       'isTwoWheeler': isTwoWheeler,
-      ...vehicle.toJson(),
+      ...vehicle.toMap(),
     });
   }
 
+  // --- Get one vehicle (example purpose) ---
   static Future<VehicleTypeModel?> getOneVehicle(String userId) async {
     final snapshot =
-        await _vehicleCollection
-            .where('userId', isEqualTo: userId)
-            .limit(1)
-            .get();
+        await _userCollection.doc(userId).collection('vehicles').limit(1).get();
 
     if (snapshot.docs.isEmpty) return null;
 
     final data = snapshot.docs.first.data();
-    return VehicleTypeModel.fromJson(data);
+    return VehicleTypeModel.fromMap(data);
   }
 
+  // --- Fetch all vehicles of the user ---
   static Stream<List<VehicleTypeModel>> fetchVehicles(String userId) {
-    return _vehicleCollection
-        .where('userId', isEqualTo: userId)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            return VehicleTypeModel.fromJson(doc.data());
-          }).toList();
-        });
+    return _userCollection.doc(userId).collection('vehicles').snapshots().map((
+      snapshot,
+    ) {
+      return snapshot.docs.map((doc) {
+        return VehicleTypeModel.fromMap(doc.data());
+      }).toList();
+    });
   }
 }

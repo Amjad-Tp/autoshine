@@ -1,21 +1,23 @@
 import 'dart:ui';
 
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
-import 'package:autoshine/models/vehicle_type_model.dart';
-import 'package:autoshine/services/cloudinary_uploader.dart';
-import 'package:autoshine/services/vehicle_services.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:autoshine/widget/brand_drop_down.dart';
+import 'package:autoshine/widget/custom_container.dart';
 import 'package:autoshine/widget/vehicle_category_selector.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 
 class CarAddScreen extends StatelessWidget {
   final VehicleAddController controller = Get.find<VehicleAddController>();
-  final CloudinaryUploader cloudinaryUploader = CloudinaryUploader();
 
-  CarAddScreen({super.key});
+  CarAddScreen({super.key}) {
+    controller.selectedBrand.value = '';
+    controller.selectedVehicleType.value = '';
+    controller.modelController.clear();
+    controller.selectedImage.value = null;
+  }
 
   final List<Map<String, dynamic>> carBrands = [
     {'name': 'Maruti Suzuki', 'image': 'assets/car_icons/suzuki.png'},
@@ -60,9 +62,7 @@ class CarAddScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             child: Column(
               children: [
-                Card(
-                  elevation: 10,
-                  color: whiteColor,
+                CustomContainer(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(22, 22, 22, 12),
                     child: Column(
@@ -128,37 +128,7 @@ class CarAddScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Obx(
-                  () => DropdownButtonFormField<String>(
-                    decoration: inputDecoration('Select Brand'),
-                    value:
-                        controller.selectedBrand.value.isEmpty
-                            ? null
-                            : controller.selectedBrand.value,
-                    items:
-                        carBrands.map((brand) {
-                          return DropdownMenuItem<String>(
-                            value: brand['name'],
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 35,
-                                  height: 35,
-                                  child: Image.asset(brand['image']),
-                                ),
-                                const SizedBox(width: 20),
-                                Text(brand['name']),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.selectedBrand.value = value;
-                      }
-                    },
-                  ),
-                ),
+                BrandDropDown(controller: controller, brandMap: carBrands),
                 const SizedBox(height: 15),
                 TextFormField(
                   controller: controller.modelController,
@@ -180,64 +150,8 @@ class CarAddScreen extends StatelessWidget {
                       return controller.isSubmitting.value
                           ? const SizedBox()
                           : button(
-                            () {
-                              () async {
-                                final brand =
-                                    controller.selectedBrand.value.trim();
-                                final model =
-                                    controller.modelController.text.trim();
-                                final selectedType =
-                                    controller.selectedVehicleType.value;
-                                final userId =
-                                    FirebaseAuth.instance.currentUser?.uid;
-
-                                if (userId == null ||
-                                    brand.isEmpty ||
-                                    model.isEmpty ||
-                                    selectedType.isEmpty) {
-                                  Get.snackbar(
-                                    "Error",
-                                    "Please fill all fields",
-                                  );
-                                  return;
-                                }
-
-                                controller.isSubmitting.value = true;
-
-                                try {
-                                  String imageUrl = '';
-                                  final imageFile =
-                                      controller.selectedImage.value;
-                                  if (imageFile != null) {
-                                    imageUrl =
-                                        await cloudinaryUploader.uploadImage(
-                                          imageFile,
-                                        ) ??
-                                        '';
-                                  }
-
-                                  final vehicle = VehicleTypeModel(
-                                    vehicleType: selectedType,
-                                    category: 'FourWheeler',
-                                    brandName: brand,
-                                    modelName: model,
-                                    vehicleImagePath: imageUrl,
-                                  );
-
-                                  await VehicleService.addVehicle(
-                                    userId: userId,
-                                    vehicle: vehicle,
-                                    isTwoWheeler: false,
-                                  );
-
-                                  Get.snackbar("Success", "Vehicle added");
-                                  Get.offAllNamed('/navbar');
-                                } catch (e) {
-                                  Get.snackbar("Error", "Something went wrong");
-                                } finally {
-                                  controller.isSubmitting.value = false;
-                                }
-                              }();
+                            () async {
+                              controller.addVehicle();
                             },
                             'Done',
                             rockBlue,

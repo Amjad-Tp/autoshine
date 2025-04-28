@@ -17,7 +17,7 @@ class AddressService {
   }
 
   //---Fetch Real time data
-  Stream<List<AddressModel>> streamServices() {
+  Stream<List<AddressModel>> fetchAllAddress() {
     return _firestore
         .collection(_userCollection)
         .doc(uid)
