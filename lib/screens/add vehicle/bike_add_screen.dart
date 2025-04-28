@@ -114,6 +114,7 @@ class BikeAddScreen extends StatelessWidget {
             TextFeildCustom(
               controller: controller.modelController,
               labelText: 'Model Name',
+              capitalization: TextCapitalization.words,
             ),
             const SizedBox(height: 30),
             Row(
