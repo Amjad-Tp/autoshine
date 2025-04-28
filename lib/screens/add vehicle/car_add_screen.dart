@@ -4,6 +4,7 @@ import 'package:autoshine/controller/add_vehicle_contrller.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/brand_drop_down.dart';
 import 'package:autoshine/widget/custom_container.dart';
+import 'package:autoshine/widget/text_feild_custom.dart';
 import 'package:autoshine/widget/vehicle_category_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -130,9 +131,9 @@ class CarAddScreen extends StatelessWidget {
                 const SizedBox(height: 30),
                 BrandDropDown(controller: controller, brandMap: carBrands),
                 const SizedBox(height: 15),
-                TextFormField(
+                TextFeildCustom(
                   controller: controller.modelController,
-                  decoration: inputDecoration('Model Name'),
+                  labelText: 'Model Name',
                 ),
                 const SizedBox(height: 30),
                 Row(

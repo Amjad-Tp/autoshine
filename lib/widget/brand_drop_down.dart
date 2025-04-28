@@ -1,4 +1,5 @@
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,17 @@ class BrandDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => DropdownButtonFormField<String>(
-        decoration: InputDecoration(hintText: 'Select Brand'),
+        decoration: InputDecoration(
+          hintText: 'Select Brand',
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: rockBlue),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: rockBlue, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
         value:
             controller.selectedBrand.value.isEmpty
                 ? null
