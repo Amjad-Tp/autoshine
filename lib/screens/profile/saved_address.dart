@@ -80,13 +80,40 @@ class SavedAddress extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          '${address.firstName} ${address.lastName ?? ''}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${address.firstName} ${address.lastName ?? ''}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            if (address.isDefault)
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 2,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Text(
+                                                  'Default',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: whiteColor,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ),
+
                                         const SizedBox(height: 10),
                                         Text(
                                           '${address.house}, ${address.city}',

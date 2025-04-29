@@ -8,6 +8,7 @@ class AddressModel {
   final String pinCode;
   final String city;
   final String? landmark;
+  final bool isDefault;
 
   AddressModel({
     required this.addressType,
@@ -19,6 +20,7 @@ class AddressModel {
     required this.pinCode,
     required this.city,
     this.landmark,
+    this.isDefault = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,6 +34,7 @@ class AddressModel {
       'pinCode': pinCode,
       'city': city,
       'landmark': landmark,
+      'isDefault': isDefault,
     };
   }
 
@@ -46,6 +49,7 @@ class AddressModel {
       pinCode: map['pinCode'] ?? '',
       city: map['city'] ?? '',
       landmark: map['landmark'],
+      isDefault: map['isDefault'] ?? false,
     );
   }
 }

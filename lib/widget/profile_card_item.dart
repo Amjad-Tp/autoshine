@@ -1,5 +1,6 @@
 import 'package:autoshine/functions/logout.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:autoshine/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCardItem extends StatelessWidget {
@@ -17,18 +18,7 @@ class ProfileCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: navigation,
-      child: Container(
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 15,
-              offset: Offset(0, 0),
-              color: Colors.black.withValues(alpha: .2),
-            ),
-          ],
-        ),
+      child: CustomContainer(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 17),
           child: Row(

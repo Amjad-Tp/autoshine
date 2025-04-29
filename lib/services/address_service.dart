@@ -9,11 +9,17 @@ class AddressService {
 
   //---Add Address
   Future<void> addAddress(AddressModel address) async {
-    await _firestore
+    final addressRef = _firestore
         .collection(_userCollection)
         .doc(uid)
-        .collection('address')
-        .add(address.toMap());
+        .collection('address');
+
+    final existingAddresses = await addressRef.get();
+
+    final data = address.toMap();
+    data['isDefault'] = existingAddresses.docs.isEmpty;
+
+    await addressRef.add(data);
   }
 
   //---Fetch Real time data

@@ -1,9 +1,11 @@
 import 'package:autoshine/screens/profile/saved_address.dart';
 import 'package:autoshine/screens/profile/terms_contitions.dart';
+import 'package:autoshine/screens/profile/vehicles_list_screen.dart';
 import 'package:autoshine/screens/profile/wishlist.dart';
 import 'package:autoshine/screens/support_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_app_bar.dart';
+import 'package:autoshine/widget/custom_container.dart';
 import 'package:autoshine/widget/profile_card_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +26,10 @@ class ProfileScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+                padding: screenPadding,
                 child: Column(
                   children: [
-                    Card(
-                      color: whiteColor,
-                      elevation: 7,
+                    CustomContainer(
                       child: Padding(
                         padding: const EdgeInsets.all(20),
                         child: Row(
@@ -64,13 +64,22 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 35),
+                    const SizedBox(height: 25),
 
                     //-----Saved Address
                     ProfileCardItem(
-                      navigation: () => Get.to(SavedAddress()),
+                      navigation: () => Get.to(() => SavedAddress()),
                       title: 'Saved Address',
                       iconImagePath: 'assets/icons/user profile/address.png',
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    //-----Your Vehicles
+                    ProfileCardItem(
+                      navigation: () => Get.to(() => VehiclesListScreen()),
+                      title: 'Your Vehicles',
+                      iconImagePath: 'assets/icons/before_login/hatchback.png',
                     ),
 
                     const SizedBox(height: 10),
@@ -85,7 +94,7 @@ class ProfileScreen extends StatelessWidget {
 
                     //-----Wishlist
                     ProfileCardItem(
-                      navigation: () => Get.to(Wishlist()),
+                      navigation: () => Get.to(() => Wishlist()),
                       title: 'WishList',
                       iconImagePath: 'assets/icons/user profile/wishlist.png',
                     ),
@@ -94,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
 
                     //-----Terms and Conditions
                     ProfileCardItem(
-                      navigation: () => Get.to(TermsContitions()),
+                      navigation: () => Get.to(() => TermsContitions()),
                       title: 'Terms and Conditions',
                       iconImagePath: 'assets/icons/user profile/terms.png',
                     ),
@@ -103,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
 
                     //-----Contact Support
                     ProfileCardItem(
-                      navigation: () => Get.to(SupportScreen()),
+                      navigation: () => Get.to(() => SupportScreen()),
                       title: 'Contact Support',
                       iconImagePath: 'assets/icons/user profile/support.png',
                     ),
