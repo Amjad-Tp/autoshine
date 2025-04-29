@@ -5,6 +5,8 @@ final darkTurquoise = const Color(0xFF00D0E7);
 
 final scaffoldColor = const Color(0xFFF2F2F2); //--Scaffold background color
 
+final blackButton = const Color(0xFF212121); //--Used for Oder,Confirm buttons
+
 final whiteColor = Colors.white;
 final blackColor = Colors.black;
 

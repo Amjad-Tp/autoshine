@@ -1,6 +1,6 @@
 import 'package:autoshine/controller/user_service_controller.dart';
 import 'package:autoshine/screens/all_services_screen.dart';
-import 'package:autoshine/screens/services_Details_screen.dart';
+import 'package:autoshine/screens/service%20screen/services_details_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_app_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';

@@ -1,7 +1,7 @@
-import 'package:autoshine/controller/add_vehicle_contrller.dart';
 import 'package:autoshine/models/service_model.dart';
-import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/screens/service%20screen/booking_details_screen.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:autoshine/widget/service_details_widgets.dart';
 import 'package:autoshine/widget/titled_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,16 +13,16 @@ class ServiceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final VehicleAddController vehicleAddController =
-        Get.find<VehicleAddController>();
+    final serviceDetailsWidgets = ServiceDetailsWidgets();
+
     return Scaffold(
       body: Column(
         children: [
           TitledAppbar(title: service.name),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
-              child: SingleChildScrollView(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,36 +81,7 @@ class ServiceDetailsScreen extends StatelessWidget {
                       ),
                     ),
 
-                    ListView.builder(
-                      padding: EdgeInsets.only(top: 15),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: service.tasks.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10, left: 7),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: rockBlue,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  service.tasks[index],
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    serviceDetailsWidgets.buildPackageDetails(service.tasks),
 
                     const SizedBox(height: 40),
 
@@ -125,57 +96,12 @@ class ServiceDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Obx(() {
-                            return DropdownButtonFormField<VehicleTypeModel>(
-                              isExpanded: true,
-                              borderRadius: BorderRadius.circular(20),
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: rockBlue,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: rockBlue,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'Please select a vehicle';
-                                }
-                                return null;
-                              },
-                              value: vehicleAddController.selectedVehicle.value,
-                              hint: Text('Choose your vehicle'),
-                              items:
-                                  vehicleAddController.vehicles.map((vehicle) {
-                                    return DropdownMenuItem(
-                                      value: vehicle,
-                                      child: Text(
-                                        '${vehicle.brandName}, ${vehicle.modelName}',
-                                      ),
-                                    );
-                                  }).toList(),
-                              onChanged: (val) {
-                                vehicleAddController.selectedVehicle.value =
-                                    val;
-                              },
-                            );
-                          }),
+                          child: serviceDetailsWidgets.buildVehicleDropdown(),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 15),
 
                     Text(
                       'Total',
@@ -192,6 +118,61 @@ class ServiceDetailsScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: () {
+                          serviceDetailsWidgets.showAddressBottomSheet();
+                        },
+
+                        style: TextButton.styleFrom(
+                          foregroundColor: whiteColor,
+                          backgroundColor: darkBlueButton,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: Icon(Icons.location_on_rounded),
+                        label: Text('Change Address'),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    serviceDetailsWidgets.buildAddressSection(),
+
+                    const SizedBox(height: 15),
+
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.to(BookingDetailsScreen());
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: whiteColor,
+                          backgroundColor: blackButton,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 125,
+                            vertical: 10,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

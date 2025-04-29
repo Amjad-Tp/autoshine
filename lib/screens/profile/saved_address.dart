@@ -20,158 +20,171 @@ class SavedAddress extends StatelessWidget {
         children: [
           TitledAppbar(title: 'Saved Address'),
           Expanded(
-            child: Padding(
-              padding: screenPadding,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: GestureDetector(
-                      onTap: () => Get.to(() => AddAddressScreen()),
-                      child: CustomContainer(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add_rounded, size: 23),
-                            const SizedBox(width: 10),
-                            Text('Add Address', style: TextStyle(fontSize: 17)),
-                          ],
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: screenPadding,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: GestureDetector(
+                        onTap: () => Get.to(() => AddAddressScreen()),
+                        child: CustomContainer(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_rounded, size: 23),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Add Address',
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  //---- Here StreamBuilder to show addresses
-                  StreamBuilder<List<AddressModel>>(
-                    stream: addressService.fetchAllAddress(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(color: rockBlue),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Something went wrong'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('No address found'));
-                      }
+                    //---- Here StreamBuilder to show addresses
+                    StreamBuilder<List<AddressModel>>(
+                      stream: addressService.fetchAllAddress(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(color: rockBlue),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Something went wrong'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('No address found'));
+                        }
 
-                      final addresses = snapshot.data!;
+                        final addresses = snapshot.data!;
 
-                      return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemCount: addresses.length,
-                        itemBuilder: (context, index) {
-                          final address = addresses[index];
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: addresses.length,
+                          itemBuilder: (context, index) {
+                            final address = addresses[index];
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: CustomContainer(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '${address.firstName} ${address.lastName ?? ''}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16,
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: CustomContainer(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                '${address.firstName} ${address.lastName ?? ''}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16,
+                                                ),
                                               ),
-                                            ),
-                                            if (address.isDefault)
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 2,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.green,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Text(
-                                                  'Default',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: whiteColor,
-                                                    fontSize: 13,
+                                              if (address.isDefault)
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 2,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          5,
+                                                        ),
+                                                  ),
+                                                  child: Text(
+                                                    'Default',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: whiteColor,
+                                                      fontSize: 13,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
 
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          '${address.house}, ${address.city}',
-                                        ),
-                                        Text(address.pinCode),
-                                        if (address.landmark != null &&
-                                            address.landmark!.isNotEmpty)
-                                          Text('Landmark: ${address.landmark}'),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          '+91 ${address.phone}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        if (address.alternativePhone != null &&
-                                            address
-                                                .alternativePhone!
-                                                .isNotEmpty)
+                                          const SizedBox(height: 10),
                                           Text(
-                                            'Alt: +91 ${address.alternativePhone}',
+                                            '${address.house}, ${address.city}',
                                           ),
+                                          Text(address.pinCode),
+                                          if (address.landmark != null &&
+                                              address.landmark!.isNotEmpty)
+                                            Text(
+                                              'Landmark: ${address.landmark}',
+                                            ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            '+91 ${address.phone}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          if (address.alternativePhone !=
+                                                  null &&
+                                              address
+                                                  .alternativePhone!
+                                                  .isNotEmpty)
+                                            Text(
+                                              'Alt: +91 ${address.alternativePhone}',
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: button(
+                                            () {}, //---Edit functionality
+                                            'Edit',
+                                            editButton,
+                                            BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: button(
+                                            () {}, //---Delete functionality
+                                            'Delete',
+                                            removeButton,
+                                            BorderRadius.only(
+                                              bottomRight: Radius.circular(10),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: button(
-                                          () {}, //---Edit functionality
-                                          'Edit',
-                                          editButton,
-                                          BorderRadius.only(
-                                            bottomLeft: Radius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: button(
-                                          () {}, //---Delete functionality
-                                          'Delete',
-                                          removeButton,
-                                          BorderRadius.only(
-                                            bottomRight: Radius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

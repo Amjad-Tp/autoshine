@@ -9,6 +9,7 @@ import 'package:autoshine/screens/signup_screen.dart';
 import 'package:autoshine/screens/splash_screen.dart';
 import 'package:autoshine/screens/vehicle_type_screen.dart';
 import 'package:autoshine/services/auth_service.dart';
+import 'package:autoshine/values/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,7 +41,10 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'AutoShine',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'poppins'),
+        theme: ThemeData(
+          fontFamily: 'poppins',
+          scaffoldBackgroundColor: scaffoldColor,
+        ),
         initialRoute: '/',
         getPages: [
           GetPage(name: '/', page: () => const SplashScreen()),

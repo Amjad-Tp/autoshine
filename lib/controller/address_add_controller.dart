@@ -25,6 +25,9 @@ class AddressAddController extends GetxController {
   //-------Alternative phonenumber toggle butotn
   var isAlternativePhoneVisible = false.obs;
 
+  //--------Selected address in service details page
+  var selectedAddress = Rxn<AddressModel>();
+
   void toggleAlternativePhoneVisibility() {
     isAlternativePhoneVisible.value = !isAlternativePhoneVisible.value;
   }
@@ -89,6 +92,15 @@ class AddressAddController extends GetxController {
       } catch (e) {
         errorSnackBar('Something went wrong : $e');
       }
+    }
+  }
+
+  void setDefaultAddress(List<AddressModel> addresses) {
+    if (addresses.isNotEmpty) {
+      selectedAddress.value = addresses.firstWhere(
+        (a) => a.isDefault,
+        orElse: () => addresses[0],
+      );
     }
   }
 }
