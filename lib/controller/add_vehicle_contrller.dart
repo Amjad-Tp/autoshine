@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class VehicleAddController extends GetxController {
   var selectedVehicleType = ''.obs;
@@ -58,18 +59,7 @@ class VehicleAddController extends GetxController {
     if (uid == null) return;
 
     VehicleService.fetchVehicles(uid).listen((vehicleList) {
-      vehicles.value =
-          vehicleList
-              .map(
-                (v) => VehicleTypeModel(
-                  vehicleType: v.vehicleType,
-                  brandName: v.brandName,
-                  modelName: v.modelName,
-                  category: v.category,
-                  vehicleImagePath: v.vehicleImagePath,
-                ),
-              )
-              .toList();
+      vehicles.value = vehicleList;
     });
   }
 
@@ -97,7 +87,10 @@ class VehicleAddController extends GetxController {
         imageUrl = await cloudinaryUploader.uploadImage(imageFile) ?? '';
       }
 
+      final vehicleId = const Uuid().v4();
+
       final vehicle = VehicleTypeModel(
+        id: vehicleId,
         vehicleType: selectedType,
         category: 'FourWheeler',
         brandName: brand,

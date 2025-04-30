@@ -17,6 +17,8 @@ final greyColor = Colors.grey.shade300; //-------Grey color
 
 final darkBlueButton = const Color(0xff00A0B2);
 
+final linearGradient = LinearGradient(colors: [rockBlue, darkTurquoise]);
+
 final shadow = [
   BoxShadow(
     blurRadius: 14,
@@ -28,6 +30,6 @@ final borderRadius = BorderRadius.circular(10); //--------Border Radius = 10
 
 final screenPadding = EdgeInsets.only(
   top: 20,
-  right: 10,
-  left: 10,
+  right: 12,
+  left: 12,
 ); //------Padding (use as default padding)

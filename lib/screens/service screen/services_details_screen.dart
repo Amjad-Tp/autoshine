@@ -1,3 +1,5 @@
+import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/service_model.dart';
 import 'package:autoshine/screens/service%20screen/booking_details_screen.dart';
 import 'package:autoshine/values/colors.dart';
@@ -14,6 +16,7 @@ class ServiceDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final serviceDetailsWidgets = ServiceDetailsWidgets();
+    final VehicleAddController vehicleAddController = Get.find();
 
     return Scaffold(
       body: Column(
@@ -149,7 +152,20 @@ class ServiceDetailsScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {
-                          Get.to(BookingDetailsScreen());
+                          final selectedVehicle =
+                              vehicleAddController.selectedVehicle.value;
+
+                          if (selectedVehicle == null) {
+                            errorSnackBar('Please Select a Vehicle');
+                            return;
+                          }
+
+                          Get.to(
+                            () => BookingDetailsScreen(
+                              service: service,
+                              vehicle: selectedVehicle,
+                            ),
+                          );
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: whiteColor,
@@ -163,7 +179,7 @@ class ServiceDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          'Confirm',
+                          'Book Now',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 22,

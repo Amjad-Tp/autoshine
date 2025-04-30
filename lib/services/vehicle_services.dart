@@ -11,10 +11,11 @@ class VehicleService {
     required VehicleTypeModel vehicle,
     required bool isTwoWheeler,
   }) async {
-    await _userCollection.doc(userId).collection('vehicles').add({
-      'isTwoWheeler': isTwoWheeler,
-      ...vehicle.toMap(),
-    });
+    await _userCollection
+        .doc(userId)
+        .collection('vehicles')
+        .doc(vehicle.id)
+        .set({'isTwoWheeler': isTwoWheeler, ...vehicle.toMap()});
   }
 
   // --- Get one vehicle (example purpose) ---
@@ -24,8 +25,8 @@ class VehicleService {
 
     if (snapshot.docs.isEmpty) return null;
 
-    final data = snapshot.docs.first.data();
-    return VehicleTypeModel.fromMap(data);
+    final doc = snapshot.docs.first;
+    return VehicleTypeModel.fromMap(doc.data(), doc.id);
   }
 
   // --- Fetch all vehicles of the user ---
@@ -34,7 +35,7 @@ class VehicleService {
       snapshot,
     ) {
       return snapshot.docs.map((doc) {
-        return VehicleTypeModel.fromMap(doc.data());
+        return VehicleTypeModel.fromMap(doc.data(), doc.id);
       }).toList();
     });
   }

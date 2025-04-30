@@ -1,5 +1,6 @@
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/controller/booking_controller.dart';
 import 'package:autoshine/screens/home/home_screen.dart';
 import 'package:autoshine/screens/login_screen.dart';
 import 'package:autoshine/screens/navigation_bar.dart';
@@ -27,6 +28,7 @@ void main() async {
 
   Get.put(AuthBloc(authService: AuthService()));
   Get.put(VehicleAddController());
+  Get.put(BookingController());
 
   runApp(MyApp());
 }
