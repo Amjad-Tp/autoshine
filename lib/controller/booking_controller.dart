@@ -1,3 +1,4 @@
+import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/booking_slot_model.dart';
 import 'package:autoshine/models/bookint_details_model.dart';
 import 'package:autoshine/models/service_model.dart';
@@ -14,6 +15,8 @@ class BookingController extends GetxController {
   var selectedDate = DateTime.now().obs;
   var selectedSlot = ''.obs;
   var timeSlots = <TimeSlotModel>[].obs;
+
+  var selectedPaymentMode = 'Cash'.obs;
 
   final List<String> allSlots = [
     '07:00 AM',
@@ -121,7 +124,7 @@ class BookingController extends GetxController {
   }) async {
     try {
       if (selectedSlot.value.isEmpty) {
-        Get.snackbar('Error', 'Please select a time slot');
+        errorSnackBar('Please select a Time slot!');
         return;
       }
 
@@ -158,9 +161,9 @@ class BookingController extends GetxController {
           .doc(bookingId)
           .set(booking.toMap());
 
-      Get.snackbar('Success', 'Booking confirmed!');
+      successSnackBar('Booking confirmed!');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to book: $e');
+      errorSnackBar('Failed to book: $e');
     }
   }
 }

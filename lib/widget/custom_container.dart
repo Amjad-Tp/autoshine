@@ -7,6 +7,7 @@ class CustomContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final BoxDecoration? decoration;
+  final Alignment? alignment;
 
   const CustomContainer({
     super.key,
@@ -15,11 +16,13 @@ class CustomContainer extends StatelessWidget {
     required this.child,
     this.padding,
     this.decoration,
+    this.alignment,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: alignment,
       height: height,
       width: width,
       padding: padding,
