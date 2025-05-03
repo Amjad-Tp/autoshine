@@ -13,7 +13,7 @@ class VehicleTypeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: rockBlue,
+        statusBarColor: goldenYellow,
         statusBarIconBrightness: Brightness.light,
       ),
     );
@@ -27,7 +27,7 @@ class VehicleTypeScreen extends StatelessWidget {
       Image.asset('assets/cars/balano.png', width: 300),
     ];
     return Scaffold(
-      backgroundColor: rockBlue,
+      backgroundColor: goldenYellow,
       body: SafeArea(
         child: Column(
           children: [
@@ -106,9 +106,9 @@ class VehicleTypeScreen extends StatelessWidget {
         width: 350,
         height: 175,
         decoration: BoxDecoration(
-          border: Border.all(color: darkTurquoise, width: 2),
+          border: Border.all(color: deepAmber, width: 2),
           borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
+          color: whiteColor,
         ),
         child: Stack(
           children: [
@@ -122,7 +122,7 @@ class VehicleTypeScreen extends StatelessWidget {
                     'I have a',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.cyan,
+                      color: darkYellowButton,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -131,7 +131,7 @@ class VehicleTypeScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 27,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: blackColor,
                       height: 1,
                     ),
                   ),

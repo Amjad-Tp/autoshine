@@ -5,6 +5,7 @@ import 'package:autoshine/models/service_model.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_container.dart';
+import 'package:autoshine/widget/time_slot_widget.dart';
 import 'package:autoshine/widget/titled_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -97,46 +98,15 @@ class BookingDetailsScreen extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio:
-                              2.5, // Makes buttons look wider (like pills)
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 2.5,
                         ),
                         itemBuilder: (context, index) {
                           final slot = bookingController.timeSlots[index];
-                          final isSelected =
-                              bookingController.selectedSlot.value == slot.time;
-                          Color color;
-
-                          if (slot.isBooked) {
-                            color = Colors.grey.shade300;
-                          } else if (isSelected) {
-                            color = Colors.black87;
-                          } else {
-                            color = Colors.green;
-                          }
-
-                          return GestureDetector(
-                            onTap: () {
-                              if (!slot.isBooked) {
-                                bookingController.bookSlot(slot.time);
-                              }
-                            },
-                            child: CustomContainer(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                slot.time,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
+                          return TimeSlotWidget(
+                            slot: slot,
+                            controller: bookingController,
                           );
                         },
                       );
@@ -190,6 +160,7 @@ class BookingDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -262,10 +233,10 @@ class BookingDetailsScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: blackButton,
+                backgroundColor: editButton,
                 foregroundColor: whiteColor,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 30,
                   vertical: 10,
                 ),
                 shape: RoundedRectangleBorder(
@@ -274,7 +245,7 @@ class BookingDetailsScreen extends StatelessWidget {
               ),
               child: const Text(
                 'Confirm',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
           ],

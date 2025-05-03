@@ -19,9 +19,7 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 130,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
-      ),
+      decoration: BoxDecoration(gradient: linearGradient),
       child: Padding(
         padding: const EdgeInsets.only(top: 40, right: 25, left: 25),
         child: Row(
@@ -77,7 +75,7 @@ class HomeAppbar extends StatelessWidget {
       width: double.infinity,
       height: 185,
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
+        gradient: linearGradient,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(50),
           bottomRight: Radius.circular(50),

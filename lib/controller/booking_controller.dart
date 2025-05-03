@@ -3,6 +3,7 @@ import 'package:autoshine/models/booking_slot_model.dart';
 import 'package:autoshine/models/bookint_details_model.dart';
 import 'package:autoshine/models/service_model.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/screens/service%20screen/Booking_confiremed_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,12 +50,12 @@ class BookingController extends GetxController {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: darkBlueButton,
+              primary: darkYellowButton,
               onPrimary: whiteColor,
-              onSurface: darkBlueButton,
+              onSurface: darkYellowButton,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: darkBlueButton),
+              style: TextButton.styleFrom(foregroundColor: darkYellowButton),
             ),
           ),
           child: child!,
@@ -115,9 +116,7 @@ class BookingController extends GetxController {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  var selectedVehicleId = ''.obs;
-
-  // Call this function to save booking
+  // Confirm booking
   Future<void> confirmBooking({
     required ServiceModel service,
     required VehicleTypeModel vehicle,
@@ -161,7 +160,10 @@ class BookingController extends GetxController {
           .doc(bookingId)
           .set(booking.toMap());
 
+      await fetchSlotsForDate();
+      selectedSlot = ''.obs;
       successSnackBar('Booking confirmed!');
+      Get.to(() => BookingConfiremedScreen());
     } catch (e) {
       errorSnackBar('Failed to book: $e');
     }

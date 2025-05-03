@@ -30,7 +30,7 @@ class ServiceDetailsWidgets {
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: rockBlue,
+                  color: goldenYellow,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -52,11 +52,11 @@ class ServiceDetailsWidgets {
         borderRadius: BorderRadius.circular(20),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: rockBlue, width: 2),
+            borderSide: BorderSide(color: goldenYellow, width: 2),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: rockBlue, width: 2),
+            borderSide: BorderSide(color: goldenYellow, width: 2),
             borderRadius: BorderRadius.circular(20),
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 12),
@@ -91,7 +91,7 @@ class ServiceDetailsWidgets {
           stream: addressService.fetchAllAddress(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator(color: rockBlue);
+              return CircularProgressIndicator(color: goldenYellow);
             }
             final addresses = snapshot.data!;
             return ListView.builder(
@@ -124,7 +124,7 @@ class ServiceDetailsWidgets {
       stream: addressService.fetchAllAddress(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: rockBlue));
+          return Center(child: CircularProgressIndicator(color: goldenYellow));
         } else if (snapshot.hasError) {
           return Center(child: Text('Something went wrong'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

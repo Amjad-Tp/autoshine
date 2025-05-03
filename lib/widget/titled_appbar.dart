@@ -11,9 +11,7 @@ class TitledAppbar extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 130,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [rockBlue, darkTurquoise]),
-      ),
+      decoration: BoxDecoration(gradient: linearGradient),
       child: Stack(
         alignment: Alignment.center,
         children: [

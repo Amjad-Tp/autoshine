@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: rockBlue,
+      backgroundColor: goldenYellow,
       body: Center(
         child: Image.asset(
           'assets/logo/AutoShine_logo_white_tr.png',

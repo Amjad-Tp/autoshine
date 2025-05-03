@@ -25,7 +25,7 @@ class TextFeildCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: rockBlue,
+      cursorColor: goldenYellow,
       validator: validator,
       controller: controller,
       style: TextStyle(fontSize: 14),
@@ -46,11 +46,11 @@ class TextFeildCustom extends StatelessWidget {
           fontSize: 14,
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: rockBlue, width: 2),
+          borderSide: BorderSide(color: goldenYellow, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: rockBlue),
+          borderSide: BorderSide(color: goldenYellow),
           borderRadius: BorderRadius.circular(10),
         ),
       ),

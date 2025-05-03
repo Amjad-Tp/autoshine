@@ -55,7 +55,9 @@ class SavedAddress extends StatelessWidget {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
-                            child: CircularProgressIndicator(color: rockBlue),
+                            child: CircularProgressIndicator(
+                              color: goldenYellow,
+                            ),
                           );
                         } else if (snapshot.hasError) {
                           return Center(child: Text('Something went wrong'));

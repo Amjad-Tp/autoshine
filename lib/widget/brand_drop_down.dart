@@ -20,11 +20,11 @@ class BrandDropDown extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'Select Brand',
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: rockBlue),
+            borderSide: BorderSide(color: goldenYellow),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: rockBlue, width: 2),
+            borderSide: BorderSide(color: goldenYellow, width: 2),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

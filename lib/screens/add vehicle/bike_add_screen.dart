@@ -123,9 +123,9 @@ class BikeAddScreen extends StatelessWidget {
                 button(
                   () => Get.back(),
                   'Back',
-                  rockBlue,
+                  goldenYellow,
                   Colors.transparent,
-                  rockBlue,
+                  goldenYellow,
                 ),
                 const SizedBox(width: 12),
                 button(
@@ -133,8 +133,8 @@ class BikeAddScreen extends StatelessWidget {
                     controller.addVehicle();
                   },
                   'Done',
-                  rockBlue,
-                  rockBlue,
+                  goldenYellow,
+                  goldenYellow,
                   whiteColor,
                 ),
               ],
