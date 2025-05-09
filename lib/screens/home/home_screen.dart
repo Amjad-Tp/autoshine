@@ -3,6 +3,8 @@ import 'package:autoshine/screens/all_services_screen.dart';
 import 'package:autoshine/screens/service%20screen/services_details_screen.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_app_bar.dart';
+import 'package:autoshine/widget/custom_container.dart';
+import 'package:autoshine/widget/image_placeholder.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,18 +62,9 @@ class HomeScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Container(
+                    child: CustomContainer(
                       padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 16,
-                            color: blackColor.withValues(alpha: .3),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+
                       child: Column(
                         children: [
                           Row(
@@ -164,12 +157,10 @@ class HomeScreen extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      CircleAvatar(
-                                        radius: 40,
-                                        backgroundImage: NetworkImage(
-                                          service.imageUrl,
+                                      ClipOval(
+                                        child: AppNetworkImage(
+                                          imageUrl: service.imageUrl,
                                         ),
-                                        backgroundColor: Colors.grey[300],
                                       ),
                                       const SizedBox(height: 5),
                                       Text(

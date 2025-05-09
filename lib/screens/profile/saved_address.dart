@@ -1,3 +1,4 @@
+import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/address_model.dart';
 import 'package:autoshine/screens/profile/add_address_screen.dart';
 import 'package:autoshine/services/address_service.dart';
@@ -55,9 +56,7 @@ class SavedAddress extends StatelessWidget {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
-                            child: CircularProgressIndicator(
-                              color: goldenYellow,
-                            ),
+                            child: CircularProgressIndicator(color: deepAmber),
                           );
                         } else if (snapshot.hasError) {
                           return Center(child: Text('Something went wrong'));
@@ -157,7 +156,11 @@ class SavedAddress extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: button(
-                                            () {}, //---Edit functionality
+                                            () => Get.to(
+                                              () => AddAddressScreen(
+                                                existingAddress: address,
+                                              ),
+                                            ),
                                             'Edit',
                                             editButton,
                                             BorderRadius.only(
@@ -167,7 +170,22 @@ class SavedAddress extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: button(
-                                            () {}, //---Delete functionality
+                                            () async {
+                                              bool success =
+                                                  await addressService
+                                                      .deleteAddress(
+                                                        address.id,
+                                                      );
+                                              if (success) {
+                                                successSnackBar(
+                                                  'Address Deleted...!',
+                                                );
+                                              } else {
+                                                errorSnackBar(
+                                                  'Cannot Delete Default Address',
+                                                );
+                                              }
+                                            },
                                             'Delete',
                                             removeButton,
                                             BorderRadius.only(

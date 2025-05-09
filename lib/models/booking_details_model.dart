@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class BookingDetailsModel {
   final String bookingId;
   final String serviceId;
@@ -19,7 +21,7 @@ class BookingDetailsModel {
       'bookingId': bookingId,
       'serviceId': serviceId,
       'userId': userId,
-      'bookingTime': bookingTime.toIso8601String(),
+      'bookingTime': Timestamp.fromDate(bookingTime),
       'selectedVehicleId': selectedVehicleId,
     };
   }
@@ -30,7 +32,7 @@ class BookingDetailsModel {
       bookingId: map['bookingId'],
       serviceId: map['serviceId'],
       userId: map['userId'],
-      bookingTime: DateTime.parse(map['bookingTime']),
+      bookingTime: (map['bookingTime'] as Timestamp).toDate(),
       selectedVehicleId: map['selectedVehicleId'],
     );
   }

@@ -5,11 +5,12 @@ import 'package:autoshine/models/address_model.dart';
 import 'package:autoshine/services/address_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class AddressAddController extends GetxController {
   final AddressService addressService = AddressService();
 
-  final RxString selectedAddressType = ''.obs;
+  var selectedAddressType = ''.obs;
 
   final addressType = TextEditingController();
   final firstNameController = TextEditingController();
@@ -63,7 +64,7 @@ class AddressAddController extends GetxController {
   }
 
   Future<void> saveAddress() async {
-    final addressType = selectedAddressType.value.trim();
+    var addressType = selectedAddressType.value.trim();
     final firstName = firstNameController.text.trim();
     final lastName = lastNameController.text.trim();
     final phone = phoneController.text.trim();
@@ -72,9 +73,13 @@ class AddressAddController extends GetxController {
     final pinCode = pinCodeController.text.trim();
     final city = cityController.text.trim();
     final landmark = landmarkController.text.trim();
+
     if (validation(firstName, phone, house, pinCode, city)) {
       try {
+        final uuid = Uuid();
+
         final address = AddressModel(
+          id: uuid.v4(),
           addressType: addressType,
           firstName: firstName,
           phone: phone,
@@ -87,7 +92,8 @@ class AddressAddController extends GetxController {
         );
 
         await addressService.addAddress(address);
-        log('Address succesfully stored');
+        log('Address successfully stored');
+        clearFields();
         Get.back();
       } catch (e) {
         errorSnackBar('Something went wrong : $e');
@@ -102,5 +108,43 @@ class AddressAddController extends GetxController {
         orElse: () => addresses[0],
       );
     }
+  }
+
+  Future<void> updateExistingAddress(AddressModel oldAddress) async {
+    final updated = AddressModel(
+      id: oldAddress.id,
+      addressType: selectedAddressType.value,
+      firstName: firstNameController.text.trim(),
+      lastName: lastNameController.text.trim(),
+      phone: phoneController.text.trim(),
+      alternativePhone: alternativePhoneController.text.trim(),
+      house: houseController.text.trim(),
+      pinCode: pinCodeController.text.trim(),
+      city: cityController.text.trim(),
+      landmark: landmarkController.text.trim(),
+      isDefault: oldAddress.isDefault,
+    );
+
+    try {
+      await addressService.updateAddress(updated);
+      log('Address successfully Updated');
+      clearFields();
+      Get.back();
+    } catch (e) {
+      errorSnackBar('Failed to update address: $e');
+    }
+  }
+
+  void clearFields() {
+    selectedAddressType.value = '';
+    firstNameController.clear();
+    lastNameController.clear();
+    phoneController.clear();
+    alternativePhoneController.clear();
+    houseController.clear();
+    pinCodeController.clear();
+    cityController.clear();
+    landmarkController.clear();
+    isAlternativePhoneVisible.value = false;
   }
 }

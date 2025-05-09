@@ -201,7 +201,7 @@ class LoginScreen extends StatelessWidget {
                       child: Container(
                         color: whiteColor.withValues(alpha: .6),
                         child: Center(
-                          child: CircularProgressIndicator(color: goldenYellow),
+                          child: CircularProgressIndicator(color: deepAmber),
                         ),
                       ),
                     ),

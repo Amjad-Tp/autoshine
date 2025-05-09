@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-final deepAmber = const Color(0xFFFBC02D); // Golden Yellow
-final goldenYellow = const Color(0xFFFFA000); // Deep Amber
+final goldenYellow = const Color(0xFFFBC02D); // Golden Yellow
+final deepAmber = const Color(0xFFFFA000); // Deep Amber
 
 final scaffoldColor = const Color(0xFFF2F2F2); //--Scaffold background color
 

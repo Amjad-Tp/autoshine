@@ -143,9 +143,9 @@ class CarAddScreen extends StatelessWidget {
                     button(
                       () => Get.back(),
                       'Back',
-                      goldenYellow,
+                      deepAmber,
                       Colors.transparent,
-                      goldenYellow,
+                      deepAmber,
                     ),
                     const SizedBox(width: 12),
                     Obx(() {
@@ -156,8 +156,8 @@ class CarAddScreen extends StatelessWidget {
                               controller.addVehicle();
                             },
                             'Done',
-                            goldenYellow,
-                            goldenYellow,
+                            deepAmber,
+                            deepAmber,
                             whiteColor,
                           );
                     }),
@@ -191,11 +191,11 @@ class CarAddScreen extends StatelessWidget {
     return InputDecoration(
       hintText: title,
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: goldenYellow, width: 2),
+        borderSide: BorderSide(color: deepAmber, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: goldenYellow, width: 2),
+        borderSide: BorderSide(color: deepAmber, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
     );

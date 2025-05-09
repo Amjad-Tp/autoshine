@@ -1,7 +1,9 @@
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/controller/address_add_controller.dart';
 import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/service_model.dart';
 import 'package:autoshine/screens/service%20screen/booking_details_screen.dart';
+import 'package:autoshine/services/address_service.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/service_details_widgets.dart';
 import 'package:autoshine/widget/titled_appbar.dart';
@@ -17,6 +19,9 @@ class ServiceDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final serviceDetailsWidgets = ServiceDetailsWidgets();
     final VehicleAddController vehicleAddController = Get.find();
+    final AddressAddController addressAddController = Get.find();
+
+    final AddressService addressService = AddressService();
 
     return Scaffold(
       body: Column(
@@ -122,24 +127,9 @@ class ServiceDetailsScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          serviceDetailsWidgets.showAddressBottomSheet();
-                        },
-
-                        style: TextButton.styleFrom(
-                          foregroundColor: whiteColor,
-                          backgroundColor: darkYellowButton,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        icon: Icon(Icons.location_on_rounded),
-                        label: Text('Change Address'),
-                      ),
+                    AddressButton(
+                      addressService: addressService,
+                      serviceDetailsWidgets: serviceDetailsWidgets,
                     ),
 
                     const SizedBox(height: 10),
@@ -154,9 +144,16 @@ class ServiceDetailsScreen extends StatelessWidget {
                         onPressed: () {
                           final selectedVehicle =
                               vehicleAddController.selectedVehicle.value;
+                          final selectedAddress =
+                              addressAddController.selectedAddress.value;
 
                           if (selectedVehicle == null) {
-                            errorSnackBar('Please Select a Vehicle');
+                            errorSnackBar('Please select a vehicle');
+                            return;
+                          }
+
+                          if (selectedAddress == null) {
+                            errorSnackBar('Please select an address');
                             return;
                           }
 

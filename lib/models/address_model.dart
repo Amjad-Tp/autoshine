@@ -1,4 +1,5 @@
 class AddressModel {
+  final String id;
   final String addressType;
   final String firstName;
   final String? lastName;
@@ -11,6 +12,7 @@ class AddressModel {
   final bool isDefault;
 
   AddressModel({
+    required this.id,
     required this.addressType,
     required this.firstName,
     this.lastName,
@@ -25,6 +27,7 @@ class AddressModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'addressType': addressType,
       'firstName': firstName,
       'lastName': lastName,
@@ -40,6 +43,7 @@ class AddressModel {
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
+      id: map['id'] ?? '',
       addressType: map['addressType'] ?? '',
       firstName: map['firstName'] ?? '',
       lastName: map['lastName'],

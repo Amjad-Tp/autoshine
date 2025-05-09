@@ -19,7 +19,48 @@ class AddressService {
     final data = address.toMap();
     data['isDefault'] = existingAddresses.docs.isEmpty;
 
-    await addressRef.add(data);
+    await addressRef.doc(address.id).set(data);
+  }
+
+  //---Update Address
+  Future<void> updateAddress(AddressModel updatedAddress) async {
+    final addressDocRef = _firestore
+        .collection(_userCollection)
+        .doc(uid)
+        .collection('address')
+        .doc(updatedAddress.id);
+
+    final docSnapshot = await addressDocRef.get();
+
+    if (docSnapshot.exists) {
+      await addressDocRef.update(updatedAddress.toMap());
+    } else {
+      throw Exception('Address not found for update.');
+    }
+  }
+
+  //---Delete Address
+  Future<bool> deleteAddress(String docId) async {
+    final addressDocRef = _firestore
+        .collection(_userCollection)
+        .doc(uid)
+        .collection('address')
+        .doc(docId);
+
+    final docSnapshot = await addressDocRef.get();
+
+    if (docSnapshot.exists) {
+      final data = docSnapshot.data();
+      if (data?['isDefault'] == true) {
+        // Cannot delete default address
+        return false;
+      }
+
+      await addressDocRef.delete();
+      return true;
+    }
+
+    return false;
   }
 
   //---Fetch Real time data

@@ -1,4 +1,5 @@
 import 'package:autoshine/controller/address_add_controller.dart';
+import 'package:autoshine/models/address_model.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/text_feild_custom.dart';
 import 'package:autoshine/widget/titled_appbar.dart';
@@ -6,18 +7,34 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddAddressScreen extends StatelessWidget {
-  const AddAddressScreen({super.key});
+  final AddressModel? existingAddress;
+  const AddAddressScreen({super.key, this.existingAddress});
 
   @override
   Widget build(BuildContext context) {
-    final AddressAddController controller = Get.put(AddressAddController());
+    final AddressAddController controller = Get.find<AddressAddController>();
 
     final List<String> dropdownItems = ['Home', 'Work', 'Other'];
+
+    if (existingAddress != null) {
+      controller.selectedAddressType.value = existingAddress!.addressType;
+      controller.firstNameController.text = existingAddress!.firstName;
+      controller.lastNameController.text = existingAddress!.lastName ?? '';
+      controller.phoneController.text = existingAddress!.phone;
+      controller.alternativePhoneController.text =
+          existingAddress!.alternativePhone ?? '';
+      controller.houseController.text = existingAddress!.house;
+      controller.pinCodeController.text = existingAddress!.pinCode;
+      controller.cityController.text = existingAddress!.city;
+      controller.landmarkController.text = existingAddress!.landmark ?? '';
+    }
 
     return Scaffold(
       body: Column(
         children: [
-          TitledAppbar(title: 'Add Address'),
+          TitledAppbar(
+            title: existingAddress != null ? 'Update Address' : 'Add Address',
+          ),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -117,7 +134,13 @@ class AddAddressScreen extends StatelessWidget {
                     Align(
                       alignment: Alignment.center,
                       child: TextButton(
-                        onPressed: controller.saveAddress,
+                        onPressed: () {
+                          if (existingAddress != null) {
+                            controller.updateExistingAddress(existingAddress!);
+                          } else {
+                            controller.saveAddress();
+                          }
+                        },
                         style: TextButton.styleFrom(
                           foregroundColor: whiteColor,
                           backgroundColor: darkYellowButton,
@@ -130,7 +153,9 @@ class AddAddressScreen extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          'Add Address',
+                          existingAddress != null
+                              ? 'Update Address'
+                              : 'Add Address',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,

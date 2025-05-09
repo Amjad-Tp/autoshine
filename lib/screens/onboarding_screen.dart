@@ -73,7 +73,7 @@ class OnboardingScreen extends StatelessWidget {
                   width: 200,
                   height: 50,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [goldenYellow, deepAmber]),
+                    gradient: LinearGradient(colors: [deepAmber, goldenYellow]),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Align(

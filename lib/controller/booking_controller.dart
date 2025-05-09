@@ -1,16 +1,12 @@
 import 'package:autoshine/functions/custom_snack_bar.dart';
 import 'package:autoshine/models/booking_slot_model.dart';
-import 'package:autoshine/models/bookint_details_model.dart';
 import 'package:autoshine/models/service_model.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
 import 'package:autoshine/screens/service%20screen/Booking_confiremed_screen.dart';
+import 'package:autoshine/services/booking_service.dart';
 import 'package:autoshine/values/colors.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 class BookingController extends GetxController {
   var selectedDate = DateTime.now().obs;
@@ -33,6 +29,8 @@ class BookingController extends GetxController {
     '05:00 PM',
     '06:00 PM',
   ];
+
+  final BookingService _bookingService = BookingService();
 
   @override
   void onInit() {
@@ -69,51 +67,14 @@ class BookingController extends GetxController {
   }
 
   Future<void> fetchSlotsForDate() async {
-    String dateKey = _getDateKey(selectedDate.value);
-
-    final slotsSnapshot =
-        await FirebaseFirestore.instance
-            .collection('bookings')
-            .doc(dateKey)
-            .collection('slots')
-            .get();
-
-    Map<String, bool> bookedSlots = {
-      for (var s in slotsSnapshot.docs) s.id: s['isBooked'] ?? false,
-    };
-
-    DateTime now = DateTime.now();
-    bool isToday = _getDateKey(now) == dateKey;
-
-    timeSlots.value =
-        allSlots.map((slot) {
-          bool isBooked = bookedSlots[slot] ?? false;
-
-          // Disable if time has already passed today
-          if (isToday) {
-            DateTime slotTime = DateFormat('hh:mm a').parse(slot);
-            DateTime slotDateTime = DateTime(
-              now.year,
-              now.month,
-              now.day,
-              slotTime.hour,
-              slotTime.minute,
-            );
-            if (slotDateTime.isBefore(now)) {
-              isBooked = true;
-            }
-          }
-
-          return TimeSlotModel(time: slot, isBooked: isBooked);
-        }).toList();
+    timeSlots.value = await _bookingService.fetchTimeSlots(
+      selectedDate.value,
+      allSlots,
+    );
   }
 
   void bookSlot(String slot) {
     selectedSlot.value = slot;
-  }
-
-  String _getDateKey(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   // Confirm booking
@@ -127,41 +88,15 @@ class BookingController extends GetxController {
         return;
       }
 
-      String dateKey = _getDateKey(selectedDate.value);
-      String slotTime = selectedSlot.value;
-
-      // Mark the time slot as booked
-      await FirebaseFirestore.instance
-          .collection('bookings')
-          .doc(dateKey)
-          .collection('slots')
-          .doc(slotTime)
-          .set({'isBooked': true});
-
-      final user = FirebaseAuth.instance.currentUser;
-      final bookingId = const Uuid().v4();
-
-      final booking = BookingDetailsModel(
-        bookingId: bookingId,
-        serviceId: service.id,
-        userId: user!.uid,
-        bookingTime: DateTime(
-          selectedDate.value.year,
-          selectedDate.value.month,
-          selectedDate.value.day,
-          DateFormat('hh:mm a').parse(slotTime).hour,
-          DateFormat('hh:mm a').parse(slotTime).minute,
-        ),
-        selectedVehicleId: vehicle.id,
+      await _bookingService.confirmBooking(
+        selectedDate: selectedDate.value,
+        selectedSlot: selectedSlot.value,
+        service: service,
+        vehicle: vehicle,
       );
 
-      await FirebaseFirestore.instance
-          .collection('confirmedBookings')
-          .doc(bookingId)
-          .set(booking.toMap());
-
       await fetchSlotsForDate();
-      selectedSlot = ''.obs;
+      selectedSlot.value = '';
       successSnackBar('Booking confirmed!');
       Get.to(() => BookingConfiremedScreen());
     } catch (e) {

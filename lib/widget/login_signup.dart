@@ -44,7 +44,7 @@ class _GradientTextfieldState extends State<GradientTextfield> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [goldenYellow, deepAmber],
+                  colors: [deepAmber, goldenYellow],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -119,7 +119,7 @@ class LoginSignupButton extends StatelessWidget {
       onPressed: navigation,
       style: TextButton.styleFrom(
         foregroundColor: whiteColor,
-        backgroundColor: goldenYellow,
+        backgroundColor: deepAmber,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 70),
       ),

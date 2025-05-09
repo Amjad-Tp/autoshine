@@ -13,7 +13,7 @@ class VehicleTypeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: goldenYellow,
+        statusBarColor: deepAmber,
         statusBarIconBrightness: Brightness.light,
       ),
     );
@@ -27,7 +27,7 @@ class VehicleTypeScreen extends StatelessWidget {
       Image.asset('assets/cars/balano.png', width: 300),
     ];
     return Scaffold(
-      backgroundColor: goldenYellow,
+      backgroundColor: deepAmber,
       body: SafeArea(
         child: Column(
           children: [
@@ -106,7 +106,7 @@ class VehicleTypeScreen extends StatelessWidget {
         width: 350,
         height: 175,
         decoration: BoxDecoration(
-          border: Border.all(color: deepAmber, width: 2),
+          border: Border.all(color: goldenYellow, width: 2),
           borderRadius: BorderRadius.circular(12),
           color: whiteColor,
         ),

@@ -2,6 +2,7 @@ import 'package:autoshine/controller/add_vehicle_contrller.dart';
 import 'package:autoshine/controller/address_add_controller.dart';
 import 'package:autoshine/models/address_model.dart';
 import 'package:autoshine/models/vehicle_type_model.dart';
+import 'package:autoshine/screens/profile/saved_address.dart';
 import 'package:autoshine/services/address_service.dart';
 import 'package:autoshine/values/colors.dart';
 import 'package:autoshine/widget/custom_container.dart';
@@ -30,7 +31,7 @@ class ServiceDetailsWidgets {
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: goldenYellow,
+                  color: deepAmber,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -52,11 +53,11 @@ class ServiceDetailsWidgets {
         borderRadius: BorderRadius.circular(20),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: goldenYellow, width: 2),
+            borderSide: BorderSide(color: deepAmber, width: 2),
             borderRadius: BorderRadius.circular(20),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: goldenYellow, width: 2),
+            borderSide: BorderSide(color: deepAmber, width: 2),
             borderRadius: BorderRadius.circular(20),
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 12),
@@ -91,7 +92,7 @@ class ServiceDetailsWidgets {
           stream: addressService.fetchAllAddress(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator(color: goldenYellow);
+              return CircularProgressIndicator(color: deepAmber);
             }
             final addresses = snapshot.data!;
             return ListView.builder(
@@ -124,7 +125,7 @@ class ServiceDetailsWidgets {
       stream: addressService.fetchAllAddress(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: goldenYellow));
+          return Center(child: CircularProgressIndicator(color: deepAmber));
         } else if (snapshot.hasError) {
           return Center(child: Text('Something went wrong'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -195,6 +196,52 @@ class ServiceDetailsWidgets {
           );
         });
       },
+    );
+  }
+}
+
+class AddressButton extends StatelessWidget {
+  const AddressButton({
+    super.key,
+    required this.addressService,
+    required this.serviceDetailsWidgets,
+  });
+
+  final AddressService addressService;
+  final ServiceDetailsWidgets serviceDetailsWidgets;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: StreamBuilder<List<AddressModel>>(
+        stream: addressService.fetchAllAddress(),
+        builder: (context, snapshot) {
+          final hasAddress = snapshot.hasData && snapshot.data!.isNotEmpty;
+
+          return TextButton.icon(
+            onPressed: () async {
+              final addressList = await addressService.fetchAllAddress().first;
+
+              if (addressList.isEmpty) {
+                Get.to(() => SavedAddress());
+              } else {
+                serviceDetailsWidgets.showAddressBottomSheet();
+              }
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: whiteColor,
+              backgroundColor: darkYellowButton,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            icon: Icon(Icons.location_on_rounded),
+            label: Text(hasAddress ? 'Change Address' : 'Add Address'),
+          );
+        },
+      ),
     );
   }
 }

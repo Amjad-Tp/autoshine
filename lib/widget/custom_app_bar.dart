@@ -4,6 +4,7 @@ import 'package:autoshine/screens/home/notification_screen.dart';
 import 'package:autoshine/screens/home/search_screen.dart';
 import 'package:autoshine/services/vehicle_services.dart';
 import 'package:autoshine/values/colors.dart';
+import 'package:autoshine/widget/image_placeholder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -165,8 +166,10 @@ class HomeAppbar extends StatelessWidget {
                                     child:
                                         vehicle.vehicleImagePath.isNotEmpty
                                             ? ClipOval(
-                                              child: Image.network(
-                                                vehicle.vehicleImagePath,
+                                              child: AppNetworkImage(
+                                                imageUrl:
+                                                    vehicle.vehicleImagePath,
+                                                fit: BoxFit.cover,
                                               ),
                                             )
                                             : Opacity(

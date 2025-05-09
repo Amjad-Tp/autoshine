@@ -197,9 +197,7 @@ class SignupScreen extends StatelessWidget {
                         children: [
                           Container(color: whiteColor),
                           Center(
-                            child: CircularProgressIndicator(
-                              color: goldenYellow,
-                            ),
+                            child: CircularProgressIndicator(color: deepAmber),
                           ),
                         ],
                       ),

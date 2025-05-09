@@ -1,5 +1,6 @@
 import 'package:autoshine/blocs/auth/auth_bloc.dart';
 import 'package:autoshine/controller/add_vehicle_contrller.dart';
+import 'package:autoshine/controller/address_add_controller.dart';
 import 'package:autoshine/controller/booking_controller.dart';
 import 'package:autoshine/screens/home/home_screen.dart';
 import 'package:autoshine/screens/login_screen.dart';
@@ -14,6 +15,7 @@ import 'package:autoshine/values/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'firebase_options.dart';
@@ -26,8 +28,17 @@ void main() async {
     persistenceEnabled: true,
   );
 
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    ),
+  );
+
   Get.put(AuthBloc(authService: AuthService()));
   Get.put(VehicleAddController());
+  Get.put(AddressAddController());
   Get.put(BookingController());
 
   runApp(MyApp());

@@ -6,8 +6,8 @@ void errorSnackBar(String message) {
   Get.snackbar(
     'Error',
     message,
-    colorText: whiteColor,
-    backgroundColor: Colors.red,
+    colorText: removeButton,
+    backgroundColor: whiteColor,
   );
 }
 
